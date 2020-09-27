@@ -6,28 +6,35 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net.Security;
 using Windows.Data.Json;
 using Windows.Storage;
 
 namespace MobirisePageTranslator.Shared
 {
-    internal sealed class MobiriseProjectViewModel
+    public sealed class MobiriseProjectViewModel
     {
         private StorageFile _projectFile;
-        private StorageFolder _projectFolder;
         private ObservableCollection<CultureInfo> _languages;
 
         public ObservableCollection<ICell> CellItems { get; }
 
-        public MobiriseProjectViewModel(StorageFile projectFile, StorageFolder projectfolder, ObservableCollection<CultureInfo> languages)
+        public MobiriseProjectViewModel()
         {
             CellItems = new ObservableCollection<ICell>();
+        }
+
+        public void Initialize(StorageFile projectFile, in ObservableCollection<CultureInfo> languages)
+        {
             _projectFile = projectFile;
-            _projectFolder = projectfolder;
             _languages = languages;
             _languages.CollectionChanged += OnLanguagesChanged;
             InitializeLanguages(_languages);
+        }
+
+        public void CleanUp()
+        {
+            _languages.CollectionChanged -= OnLanguagesChanged;
+            CellItems.Clear();
         }
 
         private void OnLanguagesChanged(object sender, NotifyCollectionChangedEventArgs args)
@@ -37,9 +44,11 @@ namespace MobirisePageTranslator.Shared
                 case NotifyCollectionChangedAction.Add:
                     args.NewItems.OfType<CultureInfo>().ToList().ForEach(AddLanguage);
                     break;
+
                 case NotifyCollectionChangedAction.Remove:
                     args.OldItems.OfType<CultureInfo>().ToList().ForEach(RemoveLanguage);
                     break;
+
                 default:
                     throw new NotSupportedException();
             }
@@ -54,32 +63,32 @@ namespace MobirisePageTranslator.Shared
 
         private void AddLanguage(CultureInfo newCultureInfo)
         {
-            var newCol = CellItems.Count == 0 ? 0 : CellItems.Max(x => x.Col) + 1;
+            var newCol = CellItems.Count == 0 ? 0 : (CellItems.Max(x => x.Col) + 1);
             CellItems.Add(new LanguageHeaderCell(newCultureInfo, newCol));
-            if (newCol != 1)
+            if (newCol != 0)
             {
-                var rowCount = CellItems.Count(x => x.Col == 0);
-                for (var i = 1; i < rowCount; i++)
-                {
-                    CellItems.Add(new ContentCell(i, newCol));
-                }
+                AddNewLanguageItems(newCol, newCultureInfo.ThreeLetterISOLanguageName);
+            }
+            else
+            {
+                InitializeOriginalItems();
             }
         }
 
-        private void RemoveLanguage(CultureInfo removedLanguage)
+        private void AddNewLanguageItems(int newCol, string iso3LetterLanguageName)
         {
-            var languageItem = CellItems
-                .OfType<LanguageHeaderCell>()
-                .First(x => Equals(x.LanguageCulture, removedLanguage));
-            var itemsForRemove = CellItems
-                .Where(x => Equals(x.Col, languageItem.Col))
-                .ToList();
+            var rowCount = CellItems.Count(x => x.Col == 0);
+            for (var i = 1; i < rowCount; i++)
+            {
+                var originalCell = CellItems.Single(x => x.Col == 0 && x.Row == i);
 
-            itemsForRemove.Add(languageItem);
-            itemsForRemove.ForEach(x => CellItems.Remove(x));
+                CellItems.Add(originalCell.Type == CellType.SubHeader
+                    ? (ICell)new PageCell(originalCell.Content, iso3LetterLanguageName, i, newCol)
+                    : new ContentCell(i, newCol, $"[{originalCell.Content}]"));
+            }
         }
 
-        public void Initialize()
+        private void InitializeOriginalItems()
         {
             var result = string.Empty;
             var tsk = _projectFile.OpenStreamForReadAsync();
@@ -94,26 +103,56 @@ namespace MobirisePageTranslator.Shared
             var settings = jsonPrjObj["settings"].GetObject();
             var pages = jsonPrjObj["pages"].GetObject();
 
-            var rowIdx = 1;
+            var rowIdx = 0;
+            JsonObject lastPage = null;
+            string lastKey = null;
 
             foreach (var key in pages.Keys)
             {
-                CellItems.Add(new PageCell(key, "eng", ++rowIdx, 0));
-
                 var page = pages[key].GetObject();
+                lastPage = page;
+                lastKey = key;
                 var pageSettings = page["settings"].GetObject();
-                var title = pageSettings["title"].GetString();
-                var meta_Descr = pageSettings["meta_descr"].GetString();
-                var custom_Html = pageSettings["custom_html"].GetString();
 
-                CellItems.Add(new OriginalCell(title, ++rowIdx));
-                CellItems.Add(new OriginalCell(meta_Descr, ++rowIdx));
-                CellItems.Add(new OriginalCell(custom_Html, ++rowIdx));
+                CellItems.Add(new OriginalPageCell(page, key, ++rowIdx, 0));
+
+                if (pageSettings.ContainsKey("title"))
+                {
+                    var title = pageSettings["title"].GetString();
+                    CellItems.Add(new OriginalCell(title, ++rowIdx));
+                }
+                if (pageSettings.ContainsKey("meta_descr"))
+                {
+                    var meta_Descr = pageSettings["meta_descr"].GetString();
+                    CellItems.Add(new OriginalCell(meta_Descr, ++rowIdx));
+                }
+                if (pageSettings.ContainsKey("custom_html"))
+                {
+                    var custom_Html = pageSettings["custom_html"].GetString();
+                    CellItems.Add(new OriginalCell(custom_Html, ++rowIdx));
+                }
             }
+
+            var newPage = JsonObject.Parse(lastPage.ToString());
+            newPage["settings"].GetObject()["title"]. "Neuer deutscher Titel");
+            newPage["settings"].GetObject()["meta_descr"] = JsonValue.Parse("Neue Metadescription.");
+
+            pages.Add("deu_" + lastKey, newPage);
+
+            var res = jsonPrjObj.ToString();
         }
 
+        private void RemoveLanguage(CultureInfo removedLanguage)
+        {
+            var languageItem = CellItems
+                .OfType<LanguageHeaderCell>()
+                .First(x => Equals(x.LanguageCulture, removedLanguage));
+            var itemsForRemove = CellItems
+                .Where(x => Equals(x.Col, languageItem.Col))
+                .ToList();
 
+            itemsForRemove.Add(languageItem);
+            itemsForRemove.ForEach(x => CellItems.Remove(x));
+        }
     }
-
-
 }

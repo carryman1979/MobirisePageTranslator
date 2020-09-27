@@ -32,15 +32,18 @@
 
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Grid.Children>
+                        <TextBlock Grid.Column="0" Text="Selected project:"/>
 
-                        <TextBox Grid.Column="0" x:Name="TextBox_MobiriseProjectPath" TextChanged="TextBox_MobiriseProjectPath_TextChanged" />
+                        <Border BorderThickness="1" BorderBrush="Black" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <TextBlock VerticalAlignment="Center" FontStyle="Italic" x:Name="TextBox_MobiriseProjectPath" />
+                        </Border>
 
-                        <Button Grid.Column="1" Content="Search Mobirise config" Click="SearchProjectFile_Click" />
-
+                        <Button Grid.Column="2" Content="Search Mobirise config" Click="SearchProjectFile_Click" />
                     </Grid.Children>
                 </Grid>
 
@@ -100,14 +103,14 @@
                         <StackPanel Grid.Column="1" Orientation="Horizontal">
                             <StackPanel.Children>
 
-                                <ComboBox ItemsSource="{x:Bind AvailableLanguages}" SelectedItem="{x:Bind CurrentSelectedCulture, Mode=TwoWay}">
+                                <ComboBox x:Name="LanguageSelectorComboBox" IsEnabled="False" ItemsSource="{x:Bind AvailableLanguages}" SelectedItem="{x:Bind CurrentSelectedCulture, Mode=TwoWay}">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Converter={StaticResource CultureInfoToLanguageName}}" />
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
-                                <Button Content="Add language" Click="AddLanguage_Click" />
+                                <Button x:Name="AddLanguageButton" IsEnabled="False" Content="Add language" Click="AddLanguage_Click" />
 
                             </StackPanel.Children>
                         </StackPanel>
@@ -119,13 +122,13 @@
 
                 <!-- Translation area -->
 
-                <shared:TranslationGrid Grid.Row="3" DataContext="{Binding }" />
+                <shared:TranslationGrid Grid.Row="3" DataContext="{x:Bind MobiriseProjectViewModel}" />
 
                 <!-- Translation area -->
 
                 <!-- Actions -->
 
-                <Button Grid.Row="4" Content="Create translated mobirise projects..." />
+                <Button x:Name="TranslateButton" Grid.Row="4" IsEnabled="False" Content="Create translated mobirise projects..." />
 
                 <!-- Actions -->
 

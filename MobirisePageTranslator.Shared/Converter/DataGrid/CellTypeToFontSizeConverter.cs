@@ -1,14 +1,18 @@
-﻿using System;
-using Windows.UI.Text;
+﻿using MobirisePageTranslator.Shared.Data;
+using System;
 using Windows.UI.Xaml.Data;
 
 namespace MobirisePageTranslator.Shared.Converter.DataGrid
 {
-    public class IsHeaderToFontWeightConverter : IValueConverter
+    public class CellTypeToFontSizeConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return (bool)value ? FontWeights.Bold : FontWeights.Normal;
+            return ((CellType)value).HasFlag(CellType.Header) 
+                ? 20 
+                : ((CellType)value).HasFlag(CellType.SubHeader)
+                    ? 14
+                    : 12;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

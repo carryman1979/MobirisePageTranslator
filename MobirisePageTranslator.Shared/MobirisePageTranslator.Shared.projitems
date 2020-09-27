@@ -19,9 +19,12 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Converter\CultureInfoToLanguageNameConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converter\DataGrid\IsHeaderToBackgroundColorConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converter\DataGrid\IsHeaderToBorderConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converter\DataGrid\IsHeaderToFontWeightConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converter\DataGrid\CellTemplateSelector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converter\DataGrid\CellTypeToBackgroundColorConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converter\DataGrid\CellTypeToBorderConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converter\DataGrid\CellTypeToFontSizeConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converter\DataGrid\CellTypeToFontStyleConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converter\DataGrid\CellTypeToFontWeightConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataGridCell.xaml.cs">
       <DependentUpon>DataGridCell.xaml</DependentUpon>
     </Compile>

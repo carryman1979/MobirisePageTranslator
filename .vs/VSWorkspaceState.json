@@ -1,7 +1,14 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\MobirisePageTranslator.Shared",
+    "\\MobirisePageTranslator.Shared\\Converter",
+    "\\MobirisePageTranslator.Shared\\Converter\\DataGrid",
+    "\\MobirisePageTranslator.UWP",
+    "\\MobirisePageTranslator.UWP\\obj",
+    "\\MobirisePageTranslator.UWP\\obj\\x86",
+    "\\MobirisePageTranslator.UWP\\obj\\x86\\Debug"
   ],
-  "SelectedNode": "\\MobiriseMultilanguageApp.Shared",
+  "SelectedNode": "\\MobirisePageTranslator.Shared\\Converter\\DataGrid\\CellTemplateSelector.cs",
   "PreviewInSolutionExplorer": false
 }

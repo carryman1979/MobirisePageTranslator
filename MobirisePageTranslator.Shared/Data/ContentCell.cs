@@ -6,10 +6,11 @@ namespace MobirisePageTranslator.Shared.Data
     {
         private string _content;
 
-        public ContentCell(int row, int col)
+        public ContentCell(int row, int col, string initialContent)
         {
             Row = row;
             Col = col;
+            _content = initialContent;
         }
 
         public CellType Type => CellType.Content;

@@ -1,0 +1,7 @@
+﻿################################################################################
+# Diese .gitignore-Datei wurde von Microsoft(R) Visual Studio automatisch erstellt.
+################################################################################
+
+/MobirisePageTranslator.macOS/bin/Debug
+/MobirisePageTranslator.macOS/obj/iPhoneSimulator/Debug/actool
+/MobirisePageTranslator.macOS/obj/iPhoneSimulator/Debug/g

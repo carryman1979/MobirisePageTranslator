@@ -1,24 +1,38 @@
-﻿namespace MobirisePageTranslator.Shared.Data
+﻿using System.ComponentModel;
+
+namespace MobirisePageTranslator.Shared.Data
 {
-    internal sealed class PageCell : ICell
+    internal sealed class PageCell : ICell, INotifyPropertyChanged
     {
         private string _content;
-        private string _iso3Letter;
 
         public PageCell(string content, string iso3Letter, int row, int col)
         {
-            _content = content;
-            _iso3Letter = iso3Letter;
+            _content = $"{iso3Letter}_{content}";
             Row = row;
             Col = col;
         }
 
-        public CellType Type => CellType.SubHeader;
+        public CellType Type => CellType.SubHeader | CellType.Content;
 
-        public string Content => $"{_content}_{_iso3Letter}";
+        public string Content
+        {
+            get
+            {
+                return _content;
+            }
+            set
+            {
+                _content = value;
+
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Content)));
+            }
+        }
 
         public int Row { get; }
 
         public int Col { get; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

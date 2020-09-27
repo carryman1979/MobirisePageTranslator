@@ -1,21 +1,22 @@
-﻿namespace MobirisePageTranslator.Shared.Data
+﻿using Windows.Data.Json;
+
+namespace MobirisePageTranslator.Shared.Data
 {
     public sealed class OriginalPageCell : ICell
     {
-        private string _content;
-        private string _iso3Letter;
-
-        public OriginalPageCell(string content, string iso3Letter, int row, int col)
+        public OriginalPageCell(JsonObject originalPageObject, string content, int row, int col)
         {
-            _content = content;
-            _iso3Letter = iso3Letter;
+            OriginalPageObject = originalPageObject;
+            Content = content;
             Row = row;
             Col = col;
         }
 
-        public CellType Type => CellType.SubHeader & CellType.Content;
+        public JsonObject OriginalPageObject { get; }
 
-        public string Content => $"{_content}_{_iso3Letter}";
+        public CellType Type => CellType.SubHeader;
+
+        public string Content { get; }
 
         public int Row { get; }
 

@@ -16,7 +16,6 @@ namespace MobirisePageTranslator
     public sealed partial class MainPage : Page
     {
         private StorageFile _mobiriseProjectFile;
-        private StorageFolder _mobiriseProjectFolder;
 
         public IReadOnlyCollection<CultureInfo> AvailableLanguages { get; }
 
@@ -24,7 +23,7 @@ namespace MobirisePageTranslator
 
         public CultureInfo CurrentSelectedCulture { get; set; }
 
-        internal MobiriseProjectViewModel MobiriseProjectViewModel { get; set; }
+        public MobiriseProjectViewModel MobiriseProjectViewModel { get; } = new MobiriseProjectViewModel();
 
         public MainPage()
         {
@@ -43,9 +42,11 @@ namespace MobirisePageTranslator
             UWP_SearchMobiriseProjectFile()
                 .ContinueWith(tsk => 
                 {
-                    Sync(() => TextBox_MobiriseProjectPath.Text = tsk.Result.Path);
-                    UWP_ReadMobiriseProjectFileToString(tsk.Result)
-                        .ContinueWith(subTsk => { /* TODO */ });
+                    Sync(() => 
+                    { 
+                        TextBox_MobiriseProjectPath.Text = tsk.Result.Path;
+                        StartMobiriseProjectParser();
+                    });
                 });
             
 #elif __MACOS__
@@ -61,16 +62,24 @@ namespace MobirisePageTranslator
             mobiriseProjectFilePicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.ComputerFolder;
 
             var mobiriseProjectFile = await mobiriseProjectFilePicker.PickSingleFileAsync();
-            Sync(() => _mobiriseProjectFile = mobiriseProjectFile);
-            var mobiriseProjectFolder = await mobiriseProjectFile.GetParentAsync();
-            Sync(() => _mobiriseProjectFolder = mobiriseProjectFolder);
+            if (mobiriseProjectFile?.IsAvailable ?? false)
+            {
+                Sync(() => 
+                { 
+                    _mobiriseProjectFile = mobiriseProjectFile;
+                    EnableLanguageSelection();
+                });
+            }
+            else
+            {
+                Sync(() =>
+                {
+                    _mobiriseProjectFile = null;
+                    DisableLanguageSelection();
+                });
+            }
 
             return mobiriseProjectFile;
-        }
-
-        private async Task<string> UWP_ReadMobiriseProjectFileToString(StorageFile mobiriseProjectFile)
-        {
-            return await FileIO.ReadTextAsync(mobiriseProjectFile);
         }
 #endif
 
@@ -82,11 +91,28 @@ namespace MobirisePageTranslator
 #pragma warning restore CS4014
         }
 
+        private void DisableLanguageSelection()
+        {
+            TranslateButton.IsEnabled = false;
+            LanguageSelectorComboBox.IsEnabled = false;
+            AddLanguageButton.IsEnabled = false;
+            TextBox_MobiriseProjectPath.Text = null;
+            MobiriseProjectViewModel.CleanUp();
+        }
+
+        private void EnableLanguageSelection()
+        {
+            LanguageSelectorComboBox.IsEnabled = true;
+            AddLanguageButton.IsEnabled = true;
+        }
+
         private void AddLanguage_Click(object sender, RoutedEventArgs e)
         {
             if (!AddedLanguages.Contains(CurrentSelectedCulture))
             {
                 AddedLanguages.Add(CurrentSelectedCulture);
+
+                StartMobiriseProjectParser();
             }
         }
 
@@ -97,16 +123,14 @@ namespace MobirisePageTranslator
             AddedLanguages.Remove(removingLanguage);
         }
 
-        private void TextBox_MobiriseProjectPath_TextChanged(object sender, TextChangedEventArgs e)
+        private void StartMobiriseProjectParser()
         {
-            StartMobiriseProjectParser(_mobiriseProjectFile, _mobiriseProjectFolder);
-        }
+            if (_mobiriseProjectFile != null && AddedLanguages.Count == 1)
+            {
+                MobiriseProjectViewModel.Initialize(_mobiriseProjectFile, AddedLanguages);
 
-        private void StartMobiriseProjectParser(StorageFile filePath, StorageFolder folderPath)
-        {
-            var projectFileWalker = new MobiriseProjectViewModel(filePath, folderPath, AddedLanguages);
-
-            projectFileWalker.Initialize();
+                TranslateButton.IsEnabled = true;
+            }
         }
     }
 }

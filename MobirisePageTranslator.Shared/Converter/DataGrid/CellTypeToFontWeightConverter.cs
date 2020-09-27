@@ -1,14 +1,17 @@
-﻿using System;
-using Windows.UI;
+﻿using MobirisePageTranslator.Shared.Data;
+using System;
+using Windows.UI.Text;
 using Windows.UI.Xaml.Data;
 
 namespace MobirisePageTranslator.Shared.Converter.DataGrid
 {
-    public class IsHeaderToBackgroundColorConverter : IValueConverter
+    public class CellTypeToFontWeightConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return (bool)value ? Colors.LightGray : Colors.White;
+            return ((CellType)value).HasFlag(CellType.Header) || ((CellType)value).HasFlag(CellType.SubHeader) 
+                ? FontWeights.Bold 
+                : FontWeights.Normal;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

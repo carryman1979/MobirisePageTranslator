@@ -11,7 +11,7 @@ namespace MobirisePageTranslator.Shared.Data
                 .Convert(cultureInfo, null, null, null)
                 .ToString();
             LanguageCulture = cultureInfo;
-            Content = $"{extractedLanguageName} {cultureInfo.ThreeLetterISOLanguageName}";
+            Content = $"{extractedLanguageName} ({cultureInfo.ThreeLetterISOLanguageName})";
             Col = columnId;
         }
 
