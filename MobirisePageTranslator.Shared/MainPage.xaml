@@ -128,7 +128,7 @@
 
                 <!-- Actions -->
 
-                <Button x:Name="TranslateButton" Grid.Row="4" IsEnabled="False" Content="Create translated mobirise projects..." />
+                <Button x:Name="TranslateButton" Grid.Row="4" IsEnabled="False" Content="Create translated mobirise projects..." Click="AddTranslatedPages_Click" />
 
                 <!-- Actions -->
 

@@ -123,6 +123,11 @@ namespace MobirisePageTranslator
             AddedLanguages.Remove(removingLanguage);
         }
 
+        private void AddTranslatedPages_Click(object sender, RoutedEventArgs e)
+        {
+            MobiriseProjectViewModel.ParseNewPagesToProject();
+        }
+
         private void StartMobiriseProjectParser()
         {
             if (_mobiriseProjectFile != null && AddedLanguages.Count == 1)

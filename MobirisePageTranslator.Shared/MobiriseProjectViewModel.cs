@@ -54,6 +54,19 @@ namespace MobirisePageTranslator.Shared
                         .ForEach(z => ParseItems(z, countOfLanguages));
                 }
             }
+            var newMobiriseJsonProject = _jsonPrjObj.ToString();
+
+            _ = WriteToFile(newMobiriseJsonProject);
+        }
+
+        private async System.Threading.Tasks.Task WriteToFile(string newContent)
+        {
+            using (StreamWriter writer = new StreamWriter(await _projectFile.OpenStreamForWriteAsync()))
+            {
+                await writer.FlushAsync();
+                await writer.WriteAsync(newContent);
+                await writer.FlushAsync();
+            }
         }
 
         private void ParseItems(ICell cellItem, int countOfLanguages)
@@ -65,7 +78,14 @@ namespace MobirisePageTranslator.Shared
                 var origPageJson = pageCell.OriginalPageObject.ToString();
                 if (_currentCopiedPage.Count > 0)
                 {
-                    _currentCopiedPage.ForEach(x => _jsonPrjObj.Add(pageCell.Content, x));
+                    for (var lngId = 0; lngId < countOfLanguages; lngId++)
+                    {
+                        _jsonPrjObj.Add(
+                            CellItems
+                                .Single(x => x.Row == pageCell.Row && x.Col == lngId + 1)
+                                .Content, 
+                            JsonObject.Parse(origPageJson));
+                    }
                     _currentCopiedPage.Clear();
                 }
                 Enumerable
@@ -173,11 +193,11 @@ namespace MobirisePageTranslator.Shared
                 CellItems.Add(new OriginalPageCell(page, key, ++rowIdx, 0));
 
                 _mobirisePureTextKeys
-                    .ForEach(k => TryGetPageItem(k, rowIdx, pageSettings));
+                    .ForEach(k => TryGetPageItem(k, ref rowIdx, pageSettings));
             }
         }
 
-        private int TryGetPageItem(string key, int rowIdx, JsonObject pageSettings)
+        private int TryGetPageItem(string key, ref int rowIdx, JsonObject pageSettings)
         {
             if (pageSettings.ContainsKey(key))
             {
