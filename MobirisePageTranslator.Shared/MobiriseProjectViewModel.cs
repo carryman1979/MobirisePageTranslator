@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using Windows.Data.Json;
 using Windows.Storage;
+using Windows.UI.Xaml.Printing;
 
 namespace MobirisePageTranslator.Shared
 {
@@ -15,6 +16,15 @@ namespace MobirisePageTranslator.Shared
     {
         private StorageFile _projectFile;
         private ObservableCollection<CultureInfo> _languages;
+        private JsonObject _jsonPrjObj;
+        private JsonObject _pages;
+        private JsonObject[] _currentCopiedPage;
+        private readonly List<string> _mobirisePureTextKeys = new List<string>
+        {
+            "title",
+            "meta_descr",
+            "custom_html"
+        };
 
         public ObservableCollection<ICell> CellItems { get; }
 
@@ -29,6 +39,39 @@ namespace MobirisePageTranslator.Shared
             _languages = languages;
             _languages.CollectionChanged += OnLanguagesChanged;
             InitializeLanguages(_languages);
+        }
+
+        public void ParseNewPagesToProject()
+        {
+            if (CellItems.Count > 0)
+            {
+                var countOfLanguages = CellItems.Max(x => x.Col);
+                if (countOfLanguages > 0)
+                {
+                    CellItems
+                        .Where(x => x.Col == 0 && x.Type != CellType.Header)
+                        .OrderBy(y => y.Row)
+                        .ToList()
+                        .ForEach(z => ParseItems(z, countOfLanguages));
+                }
+            }
+        }
+
+        private void ParseItems(ICell cellItem, int countOfLanguages)
+        {
+            var pageCell = cellItem as OriginalPageCell;
+            
+            if (pageCell != null)
+            {
+                var origPageJson = pageCell.OriginalPageObject.ToString();
+
+                //for (var lngId = 0; lngId < )
+            }
+            else
+            {
+                var originalCell = (OriginalCell)cellItem;
+                //_currentCopiedPage[originalCell.JsonKey] = JsonValue.CreateStringValue(string.Format(originalCell.Format, originalCell.Content));
+            }
         }
 
         public void CleanUp()
@@ -99,49 +142,35 @@ namespace MobirisePageTranslator.Shared
                 result = reader.ReadToEnd();
             }
 
-            var jsonPrjObj = JsonValue.Parse(result).GetObject();
-            var settings = jsonPrjObj["settings"].GetObject();
-            var pages = jsonPrjObj["pages"].GetObject();
+            _jsonPrjObj = JsonValue.Parse(result).GetObject();
+            var settings = _jsonPrjObj["settings"].GetObject();
+            _pages = _jsonPrjObj["pages"].GetObject();
 
             var rowIdx = 0;
-            JsonObject lastPage = null;
-            string lastKey = null;
 
-            foreach (var key in pages.Keys)
+            foreach (var key in _pages.Keys)
             {
-                var page = pages[key].GetObject();
-                lastPage = page;
-                lastKey = key;
+                var page = _pages[key].GetObject();
                 var pageSettings = page["settings"].GetObject();
 
                 CellItems.Add(new OriginalPageCell(page, key, ++rowIdx, 0));
 
-                if (pageSettings.ContainsKey("title"))
-                {
-                    var title = pageSettings["title"].GetString();
-                    CellItems.Add(new OriginalCell(title, ++rowIdx));
-                }
-                if (pageSettings.ContainsKey("meta_descr"))
-                {
-                    var meta_Descr = pageSettings["meta_descr"].GetString();
-                    CellItems.Add(new OriginalCell(meta_Descr, ++rowIdx));
-                }
-                if (pageSettings.ContainsKey("custom_html"))
-                {
-                    var custom_Html = pageSettings["custom_html"].GetString();
-                    CellItems.Add(new OriginalCell(custom_Html, ++rowIdx));
-                }
+                _mobirisePureTextKeys
+                    .ForEach(k => TryGetPageItem(k, rowIdx, pageSettings));
+            }
+        }
+
+        private int TryGetPageItem(string key, int rowIdx, JsonObject pageSettings)
+        {
+            if (pageSettings.ContainsKey(key))
+            {
+                var text = pageSettings[key].GetString();
+                CellItems.Add(new OriginalCell(text, ++rowIdx, key));
             }
 
-            var newPage = JsonObject.Parse(lastPage.ToString());
-            newPage["settings"].GetObject()["title"] = JsonValue.CreateStringValue("Neuer deutscher Titel");
-            newPage["settings"].GetObject()["meta_descr"] = JsonValue.CreateStringValue("Neue Metadescription.");
-
-            pages.Add("deu_" + lastKey, newPage);
-
-            var res = jsonPrjObj.ToString();
+            return rowIdx;
         }
-        
+
         private void RemoveLanguage(CultureInfo removedLanguage)
         {
             var languageItem = CellItems
