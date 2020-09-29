@@ -12891,11 +12891,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Sources\\MobirisePageTranslator\\MobirisePageTranslator.UWP\\MobirisePageTranslator.UWP.csproj",
+      "projectUniqueName": "C:\\Sources\\MobirisePageTranslator\\MobirisePageTranslator.UWP\\MobirisePageTranslator.UWP.csproj",
       "projectName": "MobirisePageTranslator.UWP",
-      "projectPath": "D:\\Sources\\MobirisePageTranslator\\MobirisePageTranslator.UWP\\MobirisePageTranslator.UWP.csproj",
+      "projectPath": "C:\\Sources\\MobirisePageTranslator\\MobirisePageTranslator.UWP\\MobirisePageTranslator.UWP.csproj",
       "packagesPath": "C:\\Users\\carry\\.nuget\\packages\\",
-      "outputPath": "D:\\Sources\\MobirisePageTranslator\\MobirisePageTranslator.UWP\\obj\\",
+      "outputPath": "C:\\Sources\\MobirisePageTranslator\\MobirisePageTranslator.UWP\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "fallbackFolders": [

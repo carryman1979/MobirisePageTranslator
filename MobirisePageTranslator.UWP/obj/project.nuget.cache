@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "fu1RdcIH+DyahQ349KrAVmOFNbRBrlz99eEEw2x6TSVJRngbuTjHmUO2m980gaesPPyKeSOKL5tYpR46lqjWRw==",
+  "dgSpecHash": "5nuoXMhVQHvDRA7TH+2EAMPddh0jjTnxdyKnkZ8HY48x/ysMF5UTdvXws1TQlzr110lPZHaCCiK0rUSLwUO9JA==",
   "success": true,
-  "projectFilePath": "D:\\Sources\\MobirisePageTranslator\\MobirisePageTranslator.UWP\\MobirisePageTranslator.UWP.csproj",
+  "projectFilePath": "C:\\Sources\\MobirisePageTranslator\\MobirisePageTranslator.UWP\\MobirisePageTranslator.UWP.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\carry\\.nuget\\packages\\commonservicelocator\\2.0.5\\commonservicelocator.2.0.5.nupkg.sha512",
     "C:\\Users\\carry\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\1.1.1\\microsoft.extensions.configuration.abstractions.1.1.1.nupkg.sha512",

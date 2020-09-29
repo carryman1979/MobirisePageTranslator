@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Machine>DESKTOP-7DMGVEO</Machine>
+    <Machine>LAPTOP-KD7HQKR3</Machine>
     <WindowsUser>carry</WindowsUser>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetOsVersion>10.0</TargetOsVersion>
@@ -10,7 +10,7 @@
     <PackageArchitecture>x86</PackageArchitecture>
     <PackageIdentityName>af81073f-bf2d-4000-ae65-28eab43555e9</PackageIdentityName>
     <PackageIdentityPublisher>CN=carry</PackageIdentityPublisher>
-    <IntermediateOutputPath>D:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\obj\x86\Debug\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\obj\x86\Debug\</IntermediateOutputPath>
     <RemoteDeploymentType>
     </RemoteDeploymentType>
     <PackageRegistrationPath>
@@ -18,7 +18,7 @@
     <RemoveNonLayoutFiles>true</RemoveNonLayoutFiles>
     <DeployOptionalPackages>false</DeployOptionalPackages>
     <WindowsSdkPath>C:\Program Files %28x86%29\Windows Kits\10\</WindowsSdkPath>
-    <LayoutDir>D:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x86\Debug\AppX</LayoutDir>
+    <LayoutDir>C:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x86\Debug\AppX</LayoutDir>
     <RegisteredManifestChecksum>F0859F75F9B240095439701BAB6A11A422EF130F4A0C4C637A86BDE46D2CF46A</RegisteredManifestChecksum>
     <RegisteredPackageMoniker>1a917153-84ba-4245-a2ee-708561d0f4ea_1.0.0.0_x86__z3a4vnvm9r3ty</RegisteredPackageMoniker>
     <RegisteredUserModeAppID>1a917153-84ba-4245-a2ee-708561d0f4ea_z3a4vnvm9r3ty!App</RegisteredUserModeAppID>
@@ -27,16 +27,16 @@
     <RegisteredVersion>1.0.0.0</RegisteredVersion>
   </PropertyGroup>
   <ItemGroup>
-    <AppXManifest Include="D:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x86\Debug\Core\AppxManifest.xml">
+    <AppXManifest Include="C:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x86\Debug\Core\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2020-09-27T18:24:05.915</Modified>
+      <Modified>2020-09-27T20:09:48.415</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
-    <AppxPackagedFile Include="D:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x86\Debug\MobirisePageTranslator.exe">
+    <AppxPackagedFile Include="C:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x86\Debug\MobirisePageTranslator.exe">
       <PackagePath>entrypoint\MobirisePageTranslator.exe</PackagePath>
-      <Modified>2020-09-27T18:24:04.918</Modified>
+      <Modified>2020-09-27T20:09:23.752</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\carry\.nuget\packages\commonservicelocator\2.0.5\lib\netstandard2.0\CommonServiceLocator.dll">
       <PackagePath>CommonServiceLocator.dll</PackagePath>
@@ -94,78 +94,78 @@
       <PackagePath>Microsoft.Toolkit.Uwp.UI.Controls.DataGrid\Microsoft.Toolkit.Uwp.UI.Controls.DataGrid.xr.xml</PackagePath>
       <Modified>2020-06-13T04:46:36.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\Assets\LockScreenLogo.scale-200.png">
+    <AppxPackagedFile Include="C:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\Assets\LockScreenLogo.scale-200.png">
       <PackagePath>Assets\LockScreenLogo.scale-200.png</PackagePath>
-      <Modified>2020-08-11T14:12:52.303</Modified>
+      <Modified>2020-09-27T20:02:08.946</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\Assets\SplashScreen.scale-200.png">
+    <AppxPackagedFile Include="C:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\Assets\SplashScreen.scale-200.png">
       <PackagePath>Assets\SplashScreen.scale-200.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2020-08-11T14:12:52.304</Modified>
+      <Modified>2020-09-27T20:02:08.946</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\Assets\Square150x150Logo.scale-200.png">
+    <AppxPackagedFile Include="C:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\Assets\Square150x150Logo.scale-200.png">
       <PackagePath>Assets\Square150x150Logo.scale-200.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2020-08-11T14:12:52.305</Modified>
+      <Modified>2020-09-27T20:02:08.946</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\Assets\Square44x44Logo.scale-200.png">
+    <AppxPackagedFile Include="C:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\Assets\Square44x44Logo.scale-200.png">
       <PackagePath>Assets\Square44x44Logo.scale-200.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2020-08-11T14:12:52.307</Modified>
+      <Modified>2020-09-27T20:02:08.946</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\Assets\StoreLogo.png">
+    <AppxPackagedFile Include="C:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\Assets\StoreLogo.png">
       <PackagePath>Assets\StoreLogo.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2020-08-11T14:12:52.308</Modified>
+      <Modified>2020-09-27T20:02:08.946</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\Assets\Wide310x150Logo.scale-200.png">
+    <AppxPackagedFile Include="C:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\Assets\Wide310x150Logo.scale-200.png">
       <PackagePath>Assets\Wide310x150Logo.scale-200.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2020-08-11T14:12:52.309</Modified>
+      <Modified>2020-09-27T20:02:08.961</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\Properties\Default.rd.xml">
+    <AppxPackagedFile Include="C:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\Properties\Default.rd.xml">
       <PackagePath>Properties\Default.rd.xml</PackagePath>
-      <Modified>2020-08-11T14:12:52.312</Modified>
+      <Modified>2020-09-27T20:02:08.961</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Sources\MobirisePageTranslator\MobirisePageTranslator.Shared\Assets\SharedAssets.md">
+    <AppxPackagedFile Include="C:\Sources\MobirisePageTranslator\MobirisePageTranslator.Shared\Assets\SharedAssets.md">
       <PackagePath>Assets\SharedAssets.md</PackagePath>
-      <Modified>2020-08-11T14:12:52.294</Modified>
+      <Modified>2020-09-27T20:02:08.930</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x86\Debug\MobirisePageTranslator.xr.xml">
+    <AppxPackagedFile Include="C:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x86\Debug\MobirisePageTranslator.xr.xml">
       <PackagePath>MobirisePageTranslator.xr.xml</PackagePath>
-      <Modified>2020-09-27T15:40:03.084</Modified>
+      <Modified>2020-09-27T20:02:09.305</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x86\Debug\App.xbf">
+    <AppxPackagedFile Include="C:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x86\Debug\App.xbf">
       <PackagePath>App.xbf</PackagePath>
-      <Modified>2020-09-27T18:20:23.652</Modified>
+      <Modified>2020-09-27T20:09:23.438</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x86\Debug\DataGridCell.xbf">
+    <AppxPackagedFile Include="C:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x86\Debug\DataGridCell.xbf">
       <PackagePath>DataGridCell.xbf</PackagePath>
-      <Modified>2020-09-27T18:20:23.653</Modified>
+      <Modified>2020-09-27T20:09:23.438</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x86\Debug\MainPage.xbf">
+    <AppxPackagedFile Include="C:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x86\Debug\MainPage.xbf">
       <PackagePath>MainPage.xbf</PackagePath>
-      <Modified>2020-09-27T18:20:23.653</Modified>
+      <Modified>2020-09-27T20:09:23.439</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x86\Debug\DataGrid.xbf">
+    <AppxPackagedFile Include="C:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x86\Debug\DataGrid.xbf">
       <PackagePath>DataGrid.xbf</PackagePath>
-      <Modified>2020-09-27T18:20:23.653</Modified>
+      <Modified>2020-09-27T20:09:23.440</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x86\Debug\TranslationGrid.xbf">
+    <AppxPackagedFile Include="C:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x86\Debug\TranslationGrid.xbf">
       <PackagePath>TranslationGrid.xbf</PackagePath>
-      <Modified>2020-09-27T18:20:23.654</Modified>
+      <Modified>2020-09-27T20:09:23.440</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Program Files %28x86%29\Windows Kits\10\UnionMetadata\10.0.18362.0\Windows.winmd">
       <PackagePath>WinMetadata\Windows.winmd</PackagePath>
       <Modified>2019-03-18T16:33:42.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x86\Debug\resources.pri">
+    <AppxPackagedFile Include="C:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x86\Debug\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2020-09-27T14:16:03.616</Modified>
+      <Modified>2020-09-27T20:09:33.308</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="D:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x86\Debug\Core\MobirisePageTranslator.exe">
+    <AppxPackagedFile Include="C:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x86\Debug\Core\MobirisePageTranslator.exe">
       <PackagePath>MobirisePageTranslator.exe</PackagePath>
-      <Modified>2020-09-27T18:24:05.910</Modified>
+      <Modified>2020-09-27T20:09:46.532</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

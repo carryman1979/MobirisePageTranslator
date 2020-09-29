@@ -6643,11 +6643,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Sources\\MobirisePageTranslator\\MobirisePageTranslator.macOS\\MobirisePageTranslator.macOS.csproj",
+      "projectUniqueName": "C:\\Sources\\MobirisePageTranslator\\MobirisePageTranslator.macOS\\MobirisePageTranslator.macOS.csproj",
       "projectName": "MobirisePageTranslator.macOS",
-      "projectPath": "D:\\Sources\\MobirisePageTranslator\\MobirisePageTranslator.macOS\\MobirisePageTranslator.macOS.csproj",
+      "projectPath": "C:\\Sources\\MobirisePageTranslator\\MobirisePageTranslator.macOS\\MobirisePageTranslator.macOS.csproj",
       "packagesPath": "C:\\Users\\carry\\.nuget\\packages\\",
-      "outputPath": "D:\\Sources\\MobirisePageTranslator\\MobirisePageTranslator.macOS\\obj\\",
+      "outputPath": "C:\\Sources\\MobirisePageTranslator\\MobirisePageTranslator.macOS\\obj\\",
       "projectStyle": "PackageReference",
       "skipContentFileWrite": true,
       "fallbackFolders": [

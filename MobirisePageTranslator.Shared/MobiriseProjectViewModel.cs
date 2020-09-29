@@ -134,14 +134,14 @@ namespace MobirisePageTranslator.Shared
             }
 
             var newPage = JsonObject.Parse(lastPage.ToString());
-            newPage["settings"].GetObject()["title"]. "Neuer deutscher Titel");
-            newPage["settings"].GetObject()["meta_descr"] = JsonValue.Parse("Neue Metadescription.");
+            newPage["settings"].GetObject()["title"] = JsonValue.CreateStringValue("Neuer deutscher Titel");
+            newPage["settings"].GetObject()["meta_descr"] = JsonValue.CreateStringValue("Neue Metadescription.");
 
             pages.Add("deu_" + lastKey, newPage);
 
             var res = jsonPrjObj.ToString();
         }
-
+        
         private void RemoveLanguage(CultureInfo removedLanguage)
         {
             var languageItem = CellItems
