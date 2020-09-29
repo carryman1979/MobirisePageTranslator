@@ -96,7 +96,7 @@ namespace MobirisePageTranslator
             TranslateButton.IsEnabled = false;
             LanguageSelectorComboBox.IsEnabled = false;
             AddLanguageButton.IsEnabled = false;
-            TextBox_MobiriseProjectPath.Text = null;
+            TextBox_MobiriseProjectPath.Text = string.Empty;
             MobiriseProjectViewModel.CleanUp();
         }
 

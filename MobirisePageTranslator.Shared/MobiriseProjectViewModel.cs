@@ -8,7 +8,6 @@ using System.IO;
 using System.Linq;
 using Windows.Data.Json;
 using Windows.Storage;
-using Windows.UI.Xaml.Printing;
 
 namespace MobirisePageTranslator.Shared
 {
@@ -18,7 +17,7 @@ namespace MobirisePageTranslator.Shared
         private ObservableCollection<CultureInfo> _languages;
         private JsonObject _jsonPrjObj;
         private JsonObject _pages;
-        private JsonObject[] _currentCopiedPage;
+        private readonly List<JsonObject> _currentCopiedPage = new List<JsonObject>();
         private readonly List<string> _mobirisePureTextKeys = new List<string>
         {
             "title",
@@ -64,13 +63,31 @@ namespace MobirisePageTranslator.Shared
             if (pageCell != null)
             {
                 var origPageJson = pageCell.OriginalPageObject.ToString();
-
-                //for (var lngId = 0; lngId < )
+                if (_currentCopiedPage.Count > 0)
+                {
+                    _currentCopiedPage.ForEach(x => _jsonPrjObj.Add(pageCell.Content, x));
+                    _currentCopiedPage.Clear();
+                }
+                Enumerable
+                    .Repeat(0, countOfLanguages)
+                    .ToList()
+                    .ForEach(x =>
+                        _currentCopiedPage.Add(JsonObject.Parse(origPageJson)));
             }
             else
             {
                 var originalCell = (OriginalCell)cellItem;
-                //_currentCopiedPage[originalCell.JsonKey] = JsonValue.CreateStringValue(string.Format(originalCell.Format, originalCell.Content));
+
+                for (var lngId = 0; lngId < countOfLanguages; lngId++)
+                {
+                    _currentCopiedPage[lngId][originalCell.JsonKey] = 
+                        JsonValue.CreateStringValue(
+                            string.Format(
+                                originalCell.Format, 
+                                CellItems
+                                .Single(x => x.Row == originalCell.Row && x.Col == lngId + 1)
+                                .Content));
+                }
             }
         }
 

@@ -1,1 +1,0 @@
-C:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\MobirisePageTranslator.UWP.csproj;x86
