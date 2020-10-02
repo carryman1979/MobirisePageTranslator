@@ -26,7 +26,7 @@
                 FontWeight="{Binding Type, Converter={StaticResource CellTypeToFontWeightConverter}}" 
                 FontStyle="{Binding Type, Converter={StaticResource CellTypeToFontStyleConverter}}"
                 FontSize="{Binding Type, Converter={StaticResource CellTypeToFontSizeConverter}}" 
-                Text="{Binding Content}" />
+                Text="{Binding Content, Mode=TwoWay}" />
         </DataTemplate>
         <datagrid:CellTemplateSelector 
             x:Key="CellItemTemplateSelector"

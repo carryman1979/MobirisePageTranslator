@@ -6,6 +6,7 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.Data.Json;
 using Windows.Storage;
 
@@ -45,6 +46,7 @@ namespace MobirisePageTranslator.Shared
             if (CellItems.Count > 0)
             {
                 var countOfLanguages = CellItems.Max(x => x.Col);
+
                 if (countOfLanguages > 0)
                 {
                     CellItems
@@ -54,12 +56,15 @@ namespace MobirisePageTranslator.Shared
                         .ForEach(z => ParseItems(z, countOfLanguages));
                 }
             }
+
+            _jsonPrjObj["pages"] = _pages;
+
             var newMobiriseJsonProject = _jsonPrjObj.ToString();
 
             _ = WriteToFile(newMobiriseJsonProject);
         }
 
-        private async System.Threading.Tasks.Task WriteToFile(string newContent)
+        private async Task WriteToFile(string newContent)
         {
             using (StreamWriter writer = new StreamWriter(await _projectFile.OpenStreamForWriteAsync()))
             {
@@ -75,40 +80,50 @@ namespace MobirisePageTranslator.Shared
             
             if (pageCell != null)
             {
-                var origPageJson = pageCell.OriginalPageObject.ToString();
-                if (_currentCopiedPage.Count > 0)
-                {
-                    for (var lngId = 0; lngId < countOfLanguages; lngId++)
-                    {
-                        _jsonPrjObj.Add(
-                            CellItems
-                                .Single(x => x.Row == pageCell.Row && x.Col == lngId + 1)
-                                .Content, 
-                            JsonObject.Parse(origPageJson));
-                    }
-                    _currentCopiedPage.Clear();
-                }
-                Enumerable
-                    .Repeat(0, countOfLanguages)
-                    .ToList()
-                    .ForEach(x =>
-                        _currentCopiedPage.Add(JsonObject.Parse(origPageJson)));
+                ParseNewPages(countOfLanguages, pageCell);
             }
             else
             {
-                var originalCell = (OriginalCell)cellItem;
+                ParseNewContentOfPages(cellItem, countOfLanguages);
+            }
+        }
 
+        private void ParseNewContentOfPages(ICell cellItem, int countOfLanguages)
+        {
+            var originalCell = (OriginalCell)cellItem;
+
+            for (var lngId = 0; lngId < countOfLanguages; lngId++)
+            {
+                _currentCopiedPage[lngId]["settings"].GetObject()[originalCell.JsonKey] =
+                    JsonValue.CreateStringValue(
+                        string.Format(
+                            originalCell.Format,
+                            CellItems
+                            .Single(x => x.Row == originalCell.Row && x.Col == lngId + 1)
+                            .Content));
+            }
+        }
+
+        private void ParseNewPages(int countOfLanguages, OriginalPageCell pageCell)
+        {
+            var origPageJson = pageCell.OriginalPageObject.ToString();
+            if (_currentCopiedPage.Count > 0)
+            {
                 for (var lngId = 0; lngId < countOfLanguages; lngId++)
                 {
-                    _currentCopiedPage[lngId][originalCell.JsonKey] = 
-                        JsonValue.CreateStringValue(
-                            string.Format(
-                                originalCell.Format, 
-                                CellItems
-                                .Single(x => x.Row == originalCell.Row && x.Col == lngId + 1)
-                                .Content));
+                    _pages.Add(
+                        CellItems
+                            .Single(x => x.Row == pageCell.Row && x.Col == lngId + 1)
+                            .Content,
+                        JsonObject.Parse(origPageJson));
                 }
+                _currentCopiedPage.Clear();
             }
+            Enumerable
+                .Repeat(0, countOfLanguages)
+                .ToList()
+                .ForEach(x =>
+                    _currentCopiedPage.Add(JsonObject.Parse(origPageJson)));
         }
 
         public void CleanUp()
@@ -144,7 +159,9 @@ namespace MobirisePageTranslator.Shared
         private void AddLanguage(CultureInfo newCultureInfo)
         {
             var newCol = CellItems.Count == 0 ? 0 : (CellItems.Max(x => x.Col) + 1);
+
             CellItems.Add(new LanguageHeaderCell(newCultureInfo, newCol));
+
             if (newCol != 0)
             {
                 AddNewLanguageItems(newCol, newCultureInfo.ThreeLetterISOLanguageName);
@@ -183,6 +200,11 @@ namespace MobirisePageTranslator.Shared
             var settings = _jsonPrjObj["settings"].GetObject();
             _pages = _jsonPrjObj["pages"].GetObject();
 
+            GetInitialOriginalItemsFromJsonObjects();
+        }
+
+        private void GetInitialOriginalItemsFromJsonObjects()
+        {
             var rowIdx = 0;
 
             foreach (var key in _pages.Keys)
