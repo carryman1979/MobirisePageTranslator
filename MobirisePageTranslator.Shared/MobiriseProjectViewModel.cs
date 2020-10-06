@@ -18,7 +18,8 @@ namespace MobirisePageTranslator.Shared
         private ObservableCollection<CultureInfo> _languages;
         private JsonObject _jsonPrjObj;
         private JsonObject _pages;
-        private readonly List<JsonObject> _currentCopiedPage = new List<JsonObject>();
+        private readonly Dictionary<string, JsonObject> _currentCopiedPage = new Dictionary<string, JsonObject>();
+        private string _currentPageName = string.Empty;
         private readonly List<string> _mobirisePureTextKeys = new List<string>
         {
             "title",
@@ -49,11 +50,11 @@ namespace MobirisePageTranslator.Shared
 
                 if (countOfLanguages > 0)
                 {
-                    CellItems
-                        .Where(x => x.Col == 0 && x.Type != CellType.Header)
+                    var testData = CellItems
+                        .Where(x => x.Col == 0)
                         .OrderBy(y => y.Row)
-                        .ToList()
-                        .ForEach(z => ParseItems(z, countOfLanguages));
+                        .ToList();
+                    testData.ForEach(z => ParseItems(z, countOfLanguages));
                 }
             }
 
@@ -90,32 +91,35 @@ namespace MobirisePageTranslator.Shared
 
         private void ParseNewContentOfPages(ICell cellItem, int countOfLanguages)
         {
-            var originalCell = (OriginalCell)cellItem;
+            var originalCell = cellItem as OriginalCell;
 
-            for (var lngId = 0; lngId < countOfLanguages; lngId++)
+            if (originalCell != null)
             {
-                _currentCopiedPage[lngId]["settings"].GetObject()[originalCell.JsonKey] =
-                    JsonValue.CreateStringValue(
-                        string.Format(
-                            originalCell.Format,
-                            CellItems
-                            .Single(x => x.Row == originalCell.Row && x.Col == lngId + 1)
-                            .Content));
+                foreach (var lngId in _currentCopiedPage.Keys)
+                {
+                    var colId = CellItems
+                            .Single(y => y.Type.HasFlag(CellType.SubHeader) && Equals(y.Content, lngId))
+                            .Col;
+                    _currentCopiedPage[lngId]["settings"].GetObject()[originalCell.JsonKey] =
+                        JsonValue.CreateStringValue(
+                            string.Format(
+                                originalCell.Format,
+                                CellItems
+                                .Single(x => x.Row == originalCell.Row && x.Col == colId)
+                                .Content));
+                }
             }
         }
 
         private void ParseNewPages(int countOfLanguages, OriginalPageCell pageCell)
         {
             var origPageJson = pageCell.OriginalPageObject.ToString();
+
             if (_currentCopiedPage.Count > 0)
             {
-                for (var lngId = 0; lngId < countOfLanguages; lngId++)
+                foreach (var currentLanguageCopy in _currentCopiedPage)
                 {
-                    _pages.Add(
-                        CellItems
-                            .Single(x => x.Row == pageCell.Row && x.Col == lngId + 1)
-                            .Content,
-                        JsonObject.Parse(origPageJson));
+                    _pages.Add(currentLanguageCopy.Key, JsonObject.Parse(currentLanguageCopy.Value.ToString()));
                 }
                 _currentCopiedPage.Clear();
             }
@@ -123,7 +127,11 @@ namespace MobirisePageTranslator.Shared
                 .Repeat(0, countOfLanguages)
                 .ToList()
                 .ForEach(x =>
-                    _currentCopiedPage.Add(JsonObject.Parse(origPageJson)));
+                    _currentCopiedPage.Add(
+                        CellItems
+                            .Single(y => y.Row == pageCell.Row && y.Col == x + 1)
+                            .Content,
+                        JsonObject.Parse(origPageJson)));
         }
 
         public void CleanUp()
