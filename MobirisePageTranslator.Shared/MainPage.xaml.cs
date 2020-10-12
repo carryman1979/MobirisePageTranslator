@@ -31,8 +31,11 @@ namespace MobirisePageTranslator
             AddedLanguages = new ObservableCollection<CultureInfo>();
             CurrentSelectedCulture = AvailableLanguages.FirstOrDefault(x => 
                 x.ThreeLetterISOLanguageName == CultureInfo.CurrentCulture.ThreeLetterISOLanguageName);
-            
+
             InitializeComponent();
+
+            MobiriseProjectViewModel.TextEditorPopUp = PopUp_TextEditor;
+            MobiriseProjectViewModel.TextEditor = TextEditorControl;
         }
 
         private void SearchProjectFile_Click(object sender, RoutedEventArgs e)

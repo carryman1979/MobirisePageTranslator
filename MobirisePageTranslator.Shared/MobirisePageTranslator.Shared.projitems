@@ -18,6 +18,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Converter\MathConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\OpenTextEditorCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converter\CultureInfoToLanguageNameConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converter\DataGrid\CellTemplateSelector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converter\DataGrid\CellTypeToBackgroundColorConverter.cs" />
@@ -25,6 +28,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converter\DataGrid\CellTypeToFontSizeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converter\DataGrid\CellTypeToFontStyleConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converter\DataGrid\CellTypeToFontWeightConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converter\DataGrid\TrimTextConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataGridCell.xaml.cs">
       <DependentUpon>DataGridCell.xaml</DependentUpon>
     </Compile>
@@ -36,6 +40,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\OriginalPageCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\PageCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\SupportedLanguages.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Editor\TextEditor.xaml.cs">
+      <DependentUpon>TextEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -49,6 +56,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)DataGridCell.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Editor\TextEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:datagrid="using:MobirisePageTranslator.Shared.Converter.DataGrid" 
     xmlns:data="using:MobirisePageTranslator.Shared.Data"
     mc:Ignorable="d"
+    Name="CellRoot"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <UserControl.Resources>
         <datagrid:CellTypeToBackgroundColorConverter x:Key="CellTypeToBackgroundColorConverter" />
@@ -13,20 +14,25 @@
         <datagrid:CellTypeToFontStyleConverter x:Key="CellTypeToFontStyleConverter" />
         <datagrid:CellTypeToFontSizeConverter x:Key="CellTypeToFontSizeConverter" />
         <datagrid:CellTypeToFontWeightConverter x:Key="CellTypeToFontWeightConverter" />
+        <datagrid:TrimTextConverter x:Key="TrimTextConverter" MaxSignCount="16" />
 
         <DataTemplate x:Key="ReadOnlyCellItemTemplate" x:DataType="data:ICell">
             <TextBlock 
                 FontWeight="{Binding Type, Converter={StaticResource CellTypeToFontWeightConverter}}" 
                 FontStyle="{Binding Type, Converter={StaticResource CellTypeToFontStyleConverter}}"
                 FontSize="{Binding Type, Converter={StaticResource CellTypeToFontSizeConverter}}" 
-                Text="{Binding Content}" />
+                Text="{Binding Content, Converter={StaticResource TrimTextConverter}}" />
         </DataTemplate>
         <DataTemplate x:Key="WriteableCellItemTemplate" x:DataType="data:ICell">
-            <TextBox
-                FontWeight="{Binding Type, Converter={StaticResource CellTypeToFontWeightConverter}}" 
-                FontStyle="{Binding Type, Converter={StaticResource CellTypeToFontStyleConverter}}"
-                FontSize="{Binding Type, Converter={StaticResource CellTypeToFontSizeConverter}}" 
-                Text="{Binding Content, Mode=TwoWay}" />
+            <Button
+                Command="{Binding ElementName=CellRoot, Path=OpenEditorCommand}"
+                CommandParameter="{Binding }">
+                <TextBlock
+                    FontWeight="{Binding Type, Converter={StaticResource CellTypeToFontWeightConverter}}" 
+                    FontStyle="{Binding Type, Converter={StaticResource CellTypeToFontStyleConverter}}"
+                    FontSize="{Binding Type, Converter={StaticResource CellTypeToFontSizeConverter}}" 
+                    Text="{Binding Content, Converter={StaticResource TrimTextConverter}}" />
+            </Button>
         </DataTemplate>
         <datagrid:CellTemplateSelector 
             x:Key="CellItemTemplateSelector"

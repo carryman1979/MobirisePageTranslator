@@ -1,4 +1,5 @@
 ﻿using MobirisePageTranslator.Shared.Data;
+using MobirisePageTranslator.Shared.Editor;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.Data.Json;
 using Windows.Storage;
+using Windows.UI.Xaml.Controls.Primitives;
 
 namespace MobirisePageTranslator.Shared
 {
@@ -24,10 +26,15 @@ namespace MobirisePageTranslator.Shared
         {
             "title",
             "meta_descr",
-            "custom_html"
+            "custom_html",
+            "_customHTML"
         };
 
         public ObservableCollection<ICell> CellItems { get; }
+
+        public Popup TextEditorPopUp { get; set; }
+
+        public TextEditor TextEditor { get; set; }
 
         public MobiriseProjectViewModel()
         {
@@ -219,23 +226,27 @@ namespace MobirisePageTranslator.Shared
             {
                 var page = _pages[key].GetObject();
                 var pageSettings = page["settings"].GetObject();
+                var pageComponents = page["components"].GetArray();
 
                 CellItems.Add(new OriginalPageCell(page, key, ++rowIdx, 0));
 
                 _mobirisePureTextKeys
                     .ForEach(k => TryGetPageItem(k, ref rowIdx, pageSettings));
+                _mobirisePureTextKeys
+                    .ForEach(k => 
+                        pageComponents
+                            .ToList()
+                            .ForEach(c => TryGetPageItem(k, ref rowIdx, c.GetObject())));
             }
         }
 
-        private int TryGetPageItem(string key, ref int rowIdx, JsonObject pageSettings)
+        private void TryGetPageItem(string key, ref int rowIdx, JsonObject jsonObject)
         {
-            if (pageSettings.ContainsKey(key))
+            if (jsonObject.ContainsKey(key))
             {
-                var text = pageSettings[key].GetString();
+                var text = jsonObject[key].GetString();
                 CellItems.Add(new OriginalCell(text, ++rowIdx, key));
             }
-
-            return rowIdx;
         }
 
         private void RemoveLanguage(CultureInfo removedLanguage)

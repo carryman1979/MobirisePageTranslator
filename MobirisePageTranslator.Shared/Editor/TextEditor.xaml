@@ -1,0 +1,60 @@
+﻿<UserControl
+    x:Class="MobirisePageTranslator.Shared.Editor.TextEditor"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Border 
+        BorderBrush="Black" 
+        BorderThickness="2"
+        Background="White">
+        <Grid 
+            Margin="0"
+            HorizontalAlignment="Stretch" 
+            VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1.5*" />
+            </Grid.ColumnDefinitions>
+            <Border 
+                Grid.Row="0" 
+                Grid.Column="0" 
+                Grid.ColumnSpan="2"
+                BorderBrush="Black" 
+                BorderThickness="0 0 0 1">
+                <TextBlock Text="Text Editor" FontSize="16" FontWeight="Bold" />
+            </Border>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Original:" FontWeight="Bold" />
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="Translation:" FontWeight="Bold" />
+            <ScrollViewer Grid.Row="2" Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <TextBlock  Text="{x:Bind Original.Content}" />
+            </ScrollViewer>
+            <ScrollViewer Grid.Row="2" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <TextBox HorizontalAlignment="Stretch" 
+                         HorizontalContentAlignment="Stretch" 
+                         VerticalContentAlignment="Stretch" 
+                         VerticalAlignment="Stretch"
+                         TextAlignment="Left" 
+                         TextWrapping="Wrap"
+                         HorizontalTextAlignment="Start" 
+                         Text="{x:Bind Translate.Content, Mode=TwoWay}" />
+            </ScrollViewer>
+            <StackPanel 
+                Grid.Row="3"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <Button Content="Save" Margin="1 2" Click="Save_Button_Click" />
+                <Button Content="Cancel" Margin="1 2" Click="Cancel_Button_Click" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

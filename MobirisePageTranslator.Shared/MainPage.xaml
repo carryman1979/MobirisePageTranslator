@@ -5,13 +5,14 @@
     xmlns:local="using:MobirisePageTranslator"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:shared="using:MobirisePageTranslator.Shared" xmlns:converter="using:MobirisePageTranslator.Shared.Converter"
+    xmlns:shared="using:MobirisePageTranslator.Shared" xmlns:converter="using:MobirisePageTranslator.Shared.Converter" xmlns:editor="using:MobirisePageTranslator.Shared.Editor"
     mc:Ignorable="d"
     Background="White">
     <Page.Content>
-        <Grid>
+        <Grid x:Name="Grid_Root">
             <Grid.Resources>
                 <converter:CultureInfoToLanguageNameConverter x:Key="CultureInfoToLanguageName" />
+                <converter:MathConverter x:Key="MathConverter" />
             </Grid.Resources>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -22,6 +23,28 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.Children>
+                <!-- Editor Pop Up -->
+
+                <Popup 
+                    x:Name="PopUp_TextEditor" 
+                    VerticalAlignment="Stretch" 
+                    HorizontalAlignment="Stretch" 
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Grid.RowSpan="4"
+                    IsOpen="False">
+                    <Grid x:Name="PopUp_Maingrid">
+                        <editor:TextEditor 
+                            x:Name="TextEditorControl" 
+                            Width="{Binding ElementName=PopUp_TextEditor, Path=ActualWidth}"
+                            Height="{Binding ElementName=PopUp_TextEditor, Path=ActualHeight}"
+                            Originals="{x:Bind MobiriseProjectViewModel.CellItems}"
+                            OwnPopUp="{Binding ElementName=PopUp_TextEditor}"/>
+                    </Grid>
+                </Popup>
+
+                <!-- Editor Pop Up -->
+                
                 <!-- Header -->
 
                 <TextBlock Grid.Row="0" FontWeight="Bold" FontSize="32" Text="Mobirise text translator" />
