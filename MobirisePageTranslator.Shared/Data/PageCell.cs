@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using MobirisePageTranslator.Shared.ViewModels;
+using System.ComponentModel;
 
 namespace MobirisePageTranslator.Shared.Data
 {

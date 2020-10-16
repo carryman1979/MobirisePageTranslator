@@ -4,7 +4,7 @@ using Windows.UI.Xaml;
 
 namespace MobirisePageTranslator.Shared.Commands
 {
-    public sealed class RelayCommand : FrameworkElement, ICommand
+    public sealed class RelayCommand : DependencyObject, ICommand
     {
         public bool CanDoThis
         {
@@ -17,7 +17,7 @@ namespace MobirisePageTranslator.Shared.Commands
                 nameof(CanDoThis), 
                 typeof(bool), 
                 typeof(RelayCommand), 
-                new PropertyMetadata(false, new PropertyChangedCallback((obj, args) =>
+                new PropertyMetadata(true, new PropertyChangedCallback((obj, args) =>
                 {
                     var snd = (RelayCommand)obj;
                     if (args.NewValue != args.OldValue)
@@ -35,28 +35,28 @@ namespace MobirisePageTranslator.Shared.Commands
                 nameof(CanDoThisWithThat),
                 typeof(Func<object, bool>),
                 typeof(RelayCommand),
-                new PropertyMetadata(new Func<bool>(() => true), new PropertyChangedCallback((obj, args) => 
+                new PropertyMetadata(new Func<object, bool>(obj => true), new PropertyChangedCallback((obj, args) => 
                 {
                     var snd = (RelayCommand)obj;
                     if (args.NewValue != args.OldValue && args.NewValue != null)
                         snd.CanExecuteChanged?.Invoke(snd, EventArgs.Empty);
                 })));
 
-        public Action<object> Dothis
+        public Action<object> DoThis
         {
-            get { return (Action<object>)GetValue(DothisProperty); }
-            set { SetValue(DothisProperty, value); }
+            get { return (Action<object>)GetValue(DoThisProperty); }
+            set { SetValue(DoThisProperty, value); }
         }
 
-        public static readonly DependencyProperty DothisProperty =
+        public static readonly DependencyProperty DoThisProperty =
             DependencyProperty.Register(
-                nameof(Dothis), 
+                nameof(DoThis),
                 typeof(Action<object>), 
                 typeof(RelayCommand), 
-                new PropertyMetadata(null, new PropertyChangedCallback((obj, args) =>
+                new PropertyMetadata(null, new PropertyChangedCallback((obj, args) => 
                 {
                     var snd = (RelayCommand)obj;
-                    if (args.NewValue != args.OldValue)
+                    if (args.NewValue != args.OldValue && args.NewValue != null)
                         snd.CanExecuteChanged?.Invoke(snd, EventArgs.Empty);
                 })));
 
@@ -64,12 +64,12 @@ namespace MobirisePageTranslator.Shared.Commands
 
         public bool CanExecute(object parameter)
         {
-            return Dothis != null && CanDoThis && CanDoThisWithThat.Invoke(parameter);
+            return DoThis != null && CanDoThis && CanDoThisWithThat.Invoke(parameter);
         }
 
         public void Execute(object parameter)
         {
-            Dothis?.Invoke(parameter);
+            DoThis?.Invoke(parameter);
         }
     }
 }

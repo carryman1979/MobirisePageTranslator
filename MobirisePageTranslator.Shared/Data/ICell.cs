@@ -1,4 +1,4 @@
-﻿using System;
+﻿using MobirisePageTranslator.Shared.ViewModels;
 
 namespace MobirisePageTranslator.Shared.Data
 {

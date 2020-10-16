@@ -11,7 +11,7 @@ namespace MobirisePageTranslator.Shared.Data
             { 
                 new CultureInfo("en-GB"),
                 new CultureInfo("de-DE"),
-                new CultureInfo("fr-DR"),
+                new CultureInfo("fr-FR"),
                 new CultureInfo("es-ES"),
                 new CultureInfo("pt-PT"),
                 new CultureInfo("el-GR"),

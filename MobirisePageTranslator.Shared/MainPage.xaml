@@ -5,11 +5,13 @@
     xmlns:local="using:MobirisePageTranslator"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:shared="using:MobirisePageTranslator.Shared" xmlns:converter="using:MobirisePageTranslator.Shared.Converter" xmlns:editor="using:MobirisePageTranslator.Shared.Editor"
-    mc:Ignorable="d"
-    Background="White">
+    xmlns:shared="using:MobirisePageTranslator.Shared" 
+    xmlns:converter="using:MobirisePageTranslator.Shared.Converter" 
+    xmlns:editor="using:MobirisePageTranslator.Shared.Editor"
+    xmlns:viewmodels="using:MobirisePageTranslator.Shared.ViewModels"
+    mc:Ignorable="d">
     <Page.Content>
-        <Grid x:Name="Grid_Root">
+        <Grid x:Name="Grid_Root" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
             <Grid.Resources>
                 <converter:CultureInfoToLanguageNameConverter x:Key="CultureInfoToLanguageName" />
                 <converter:MathConverter x:Key="MathConverter" />
@@ -32,14 +34,14 @@
                     Grid.Column="0"
                     Grid.Row="1"
                     Grid.RowSpan="4"
-                    IsOpen="False">
-                    <Grid x:Name="PopUp_Maingrid">
+                    DataContext="{x:Bind viewmodels:TextEditorViewModel.Get}">
+                    <Popup.IsOpen>
+                        <Binding Path="IsOpen" />
+                    </Popup.IsOpen>
+                    <Grid>
                         <editor:TextEditor 
-                            x:Name="TextEditorControl" 
                             Width="{Binding ElementName=PopUp_TextEditor, Path=ActualWidth}"
-                            Height="{Binding ElementName=PopUp_TextEditor, Path=ActualHeight}"
-                            Originals="{x:Bind MobiriseProjectViewModel.CellItems}"
-                            OwnPopUp="{Binding ElementName=PopUp_TextEditor}"/>
+                            Height="{Binding ElementName=PopUp_TextEditor, Path=ActualHeight}" />
                     </Grid>
                 </Popup>
 

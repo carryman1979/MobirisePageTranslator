@@ -1,5 +1,5 @@
-﻿using MobirisePageTranslator.Shared;
-using MobirisePageTranslator.Shared.Data;
+﻿using MobirisePageTranslator.Shared.Data;
+using MobirisePageTranslator.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -33,9 +33,6 @@ namespace MobirisePageTranslator
                 x.ThreeLetterISOLanguageName == CultureInfo.CurrentCulture.ThreeLetterISOLanguageName);
 
             InitializeComponent();
-
-            MobiriseProjectViewModel.TextEditorPopUp = PopUp_TextEditor;
-            MobiriseProjectViewModel.TextEditor = TextEditorControl;
         }
 
         private void SearchProjectFile_Click(object sender, RoutedEventArgs e)
@@ -47,7 +44,7 @@ namespace MobirisePageTranslator
                 {
                     Sync(() => 
                     { 
-                        TextBox_MobiriseProjectPath.Text = tsk.Result.Path;
+                        TextBox_MobiriseProjectPath.Text = tsk.Result?.Path ?? string.Empty;
                         StartMobiriseProjectParser();
                     });
                 });

@@ -18,8 +18,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Converter\DataGrid\CellContentDoneOrToDoColorBrushConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converter\MathConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Commands\OpenTextEditorCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Commands\RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converter\CultureInfoToLanguageNameConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converter\DataGrid\CellTemplateSelector.cs" />
@@ -43,13 +43,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Editor\TextEditor.xaml.cs">
       <DependentUpon>TextEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\TextEditorViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)DataGrid.xaml.cs">
       <DependentUpon>DataGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)MobiriseProjectViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MobiriseProjectViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TranslationGrid.xaml.cs">
       <DependentUpon>TranslationGrid.xaml</DependentUpon>
     </Compile>
@@ -81,5 +82,8 @@
   </ItemGroup>
   <ItemGroup>
     <PRIResource Include="$(MSBuildThisFileDirectory)Strings\en\Resources.resw" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)ViewModels\" />
   </ItemGroup>
 </Project>
