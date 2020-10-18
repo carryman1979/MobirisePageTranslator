@@ -15,15 +15,77 @@ namespace MobirisePageTranslator.Shared.ViewModels
     public sealed class MainViewModel : INotifyPropertyChanged
     {
         private StorageFile _mobiriseProjectFile;
+        private CultureInfo _currentSelectedLanguageCulture;
+        private string _projectFilePath = string.Empty;
         private bool _canAddLanguage = true;
         private bool _canParseNewLanguagesToProject;
-        private CultureInfo _currentSelectedLanguageCulture;
+        private static volatile Lazy<MainViewModel> _lazyObject = new Lazy<MainViewModel>(new MainViewModel());
+
+        public static MainViewModel Get => _lazyObject.Value;
+
+        private MainViewModel()
+        {
+            AddLanguage = new Action(AddLanguageLogic);
+            RemoveLanguage = new Action<object>(RemoveLanguageLogic);
+            ParseNewLanguagesToProject = new Action(MobiriseProjectViewModel.Get.ParseNewPagesToProject);
+            OpenProjectFileSearchDialog = new Action(SearchProjectFile);
+
+            _currentSelectedLanguageCulture = AvailableLanguages.FirstOrDefault(x =>
+                x.ThreeLetterISOLanguageName == CultureInfo.CurrentCulture.ThreeLetterISOLanguageName);
+        }
 
         public IReadOnlyCollection<CultureInfo> AvailableLanguages { get; } = new SupportedLanguages();
 
         public ObservableCollection<CultureInfo> AddedLanguages { get; } = new ObservableCollection<CultureInfo>();
 
-        public CultureInfo CurrentSelectedLanguageCulture 
+        public Action AddLanguage { get; }
+
+        public Action<object> RemoveLanguage { get; }
+
+        public Action OpenProjectFileSearchDialog { get; }
+
+        public Action ParseNewLanguagesToProject { get; }
+
+        public string ProjectFilePath
+        {
+            get => _projectFilePath;
+            set
+            {
+                if (!Equals(_projectFilePath, value))
+                {
+                    _projectFilePath = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        public bool CanAddLanguage
+        {
+            get => _canAddLanguage;
+            set
+            {
+                if (!Equals(_canAddLanguage, value))
+                {
+                    _canAddLanguage = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        public bool CanParseNewLanguagesToProject
+        {
+            get => _canParseNewLanguagesToProject;
+            set
+            {
+                if (!Equals(_canParseNewLanguagesToProject, value))
+                {
+                    _canParseNewLanguagesToProject = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        public CultureInfo CurrentSelectedLanguageCulture
         {
             get => _currentSelectedLanguageCulture;
             set
@@ -37,17 +99,14 @@ namespace MobirisePageTranslator.Shared.ViewModels
             }
         }
 
-        public string ProjectFilePath { get; set; }
-
-        public MainViewModel()
+        private void AddLanguageLogic()
         {
-            _currentSelectedLanguageCulture = AvailableLanguages.FirstOrDefault(x =>
-                x.ThreeLetterISOLanguageName == CultureInfo.CurrentCulture.ThreeLetterISOLanguageName);
-
-            AddLanguage = new Action(AddLanguageLogic);
-            RemoveLanguage = new Action<object>(RemoveLanguageLogic);
-            ParseNewLanguagesToProject = new Action(MobiriseProjectViewModel.Get.ParseNewPagesToProject);
-            OpenProjectFileSearchDialog = new Action(SearchProjectFile);
+            if (_currentSelectedLanguageCulture != null && !AddedLanguages.Contains(_currentSelectedLanguageCulture))
+            {
+                CanAddLanguage = false;
+                AddedLanguages.Add(_currentSelectedLanguageCulture);
+                StartMobiriseProjectParser();
+            }
         }
 
         private void RemoveLanguageLogic(object parameter)
@@ -61,29 +120,12 @@ namespace MobirisePageTranslator.Shared.ViewModels
             }
         }
 
-        private void AddLanguageLogic()
-        {
-            if (_currentSelectedLanguageCulture != null && !AddedLanguages.Contains(_currentSelectedLanguageCulture))
-            {
-                CanAddLanguage = false;
-                AddedLanguages.Add(_currentSelectedLanguageCulture);
-                StartMobiriseProjectParser();
-            }
-        }
-
         private void SearchProjectFile()
         {
 #if NETFX_CORE
 
             UWP_SearchMobiriseProjectFile()
-                .ContinueWith(tsk =>
-                {
-                    Sync(() =>
-                    {
-                        ProjectFilePath = tsk.Result?.Path ?? string.Empty;
-                        StartMobiriseProjectParser();
-                    });
-                });
+                .ContinueWith(tsk => Sync(StartMobiriseProjectParser));
 
 #elif __MACOS__
 
@@ -104,7 +146,7 @@ namespace MobirisePageTranslator.Shared.ViewModels
                 Sync(() =>
                 {
                     _mobiriseProjectFile = mobiriseProjectFile;
-                    EnableLanguageSelection();
+                    ProjectFilePath = _mobiriseProjectFile.Path;
                 });
             }
             else
@@ -112,7 +154,9 @@ namespace MobirisePageTranslator.Shared.ViewModels
                 Sync(() =>
                 {
                     _mobiriseProjectFile = null;
-                    DisableLanguageSelection();
+                    ProjectFilePath = string.Empty;
+                    MobiriseProjectViewModel.Get.CleanUp();
+                    UpdateButtonsState();
                 });
             }
 
@@ -132,53 +176,11 @@ namespace MobirisePageTranslator.Shared.ViewModels
 #pragma warning restore CS4014
         }
 
-        private void DisableLanguageSelection()
+        private void UpdateButtonsState()
         {
-            //TranslateButton.IsEnabled = false;
-            //LanguageSelectorComboBox.IsEnabled = false;
-            //AddLanguageButton.IsEnabled = false;
-            ProjectFilePath = string.Empty;
-            MobiriseProjectViewModel.Get.CleanUp();
-        }
-
-        private void EnableLanguageSelection()
-        {
-            //LanguageSelectorComboBox.IsEnabled = true;
-            //AddLanguageButton.IsEnabled = true;
-        }
-
-        public Action AddLanguage { get; }
-
-        public bool CanAddLanguage 
-        {
-            get => _canAddLanguage;
-            set
-            {
-                if (!Equals(_canAddLanguage, value))
-                {
-                    _canAddLanguage = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
-
-        public Action<object> RemoveLanguage { get; }
-
-        public Action ParseNewLanguagesToProject { get; }
-
-        public Action OpenProjectFileSearchDialog { get; }
-
-        public bool CanParseNewLanguagesToProject 
-        {
-            get => _canParseNewLanguagesToProject; 
-            set
-            {
-                if (!Equals(_canParseNewLanguagesToProject, value))
-                {
-                    _canParseNewLanguagesToProject = value;
-                    RaisePropertyChanged();
-                }
-            }
+            CanAddLanguage = _mobiriseProjectFile != null;
+            if (_mobiriseProjectFile == null)
+                CanParseNewLanguagesToProject = false;
         }
 
         private void StartMobiriseProjectParser()

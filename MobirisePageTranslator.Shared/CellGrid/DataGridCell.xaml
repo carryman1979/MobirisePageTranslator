@@ -20,24 +20,25 @@
 
             <DataTemplate x:Key="ReadOnlyCellItemTemplate" x:DataType="data:ICell">
                 <TextBlock 
-                FontWeight="{Binding Type, Converter={StaticResource CellTypeToFontWeightConverter}}" 
-                FontStyle="{Binding Type, Converter={StaticResource CellTypeToFontStyleConverter}}"
-                FontSize="{Binding Type, Converter={StaticResource CellTypeToFontSizeConverter}}" 
-                Text="{Binding Content, Converter={StaticResource TrimTextConverter}}" />
-            </DataTemplate>
-            <DataTemplate x:Key="WriteableCellItemTemplate" x:DataType="data:ICell">
-                <Button
-                Background="{Binding Path=Content, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CellContentToBackgroundConverter}}"
-                Foreground="{Binding Path=Content, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CellContentToForegroundConverter}}"
-                BorderBrush="{Binding Path=Content, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CellContentToBorderConverter}}"
-                Style="{StaticResource OpenTextEditorButtonStyle}"
-                Command="{StaticResource OpenCommand}"
-                CommandParameter="{Binding }">
-                    <TextBlock
+                    Foreground="{StaticResource OriginalCellTextForeground}"
                     FontWeight="{Binding Type, Converter={StaticResource CellTypeToFontWeightConverter}}" 
                     FontStyle="{Binding Type, Converter={StaticResource CellTypeToFontStyleConverter}}"
                     FontSize="{Binding Type, Converter={StaticResource CellTypeToFontSizeConverter}}" 
                     Text="{Binding Content, Converter={StaticResource TrimTextConverter}}" />
+            </DataTemplate>
+            <DataTemplate x:Key="WriteableCellItemTemplate" x:DataType="data:ICell">
+                <Button
+                    Background="{Binding Path=Content, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CellContentToBackgroundConverter}}"
+                    Foreground="{Binding Path=Content, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CellContentToForegroundConverter}}"
+                    BorderBrush="{Binding Path=Content, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CellContentToBorderConverter}}"
+                    Style="{StaticResource OpenTextEditorButtonStyle}"
+                    Command="{StaticResource OpenCommand}"
+                    CommandParameter="{Binding }">
+                    <TextBlock
+                        FontWeight="{Binding Type, Converter={StaticResource CellTypeToFontWeightConverter}}" 
+                        FontStyle="{Binding Type, Converter={StaticResource CellTypeToFontStyleConverter}}"
+                        FontSize="{Binding Type, Converter={StaticResource CellTypeToFontSizeConverter}}" 
+                        Text="{Binding Content, Converter={StaticResource TrimTextConverter}}" />
                 </Button>
             </DataTemplate>
 

@@ -32,6 +32,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)CellGrid\DataGridCell.xaml.cs">
       <DependentUpon>DataGridCell.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Converter\IsNotNullOrWhitespaceToBoolConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\CellType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\ContentCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\LanguageHeaderCell.cs" />

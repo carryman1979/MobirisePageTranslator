@@ -6,14 +6,24 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:shared="using:MobirisePageTranslator.Shared.CellGrid" 
     xmlns:converter="using:MobirisePageTranslator.Shared.Converter" 
+    xmlns:commands="using:MobirisePageTranslator.Shared.Commands" 
     xmlns:editor="using:MobirisePageTranslator.Shared.Editor"
     xmlns:viewmodels="using:MobirisePageTranslator.Shared.ViewModels"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    DataContext="{x:Bind viewmodels:MainViewModel.Get}">
     <Page.Content>
         <Grid x:Name="Grid_Root" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
             <Grid.Resources>
+                
                 <converter:CultureInfoToLanguageNameConverter x:Key="CultureInfoToLanguageName" />
                 <converter:MathConverter x:Key="MathConverter" />
+                <converter:IsNotNullOrWhitespaceToBoolConverter x:Key="IsNotNullOrWhitespaceConverter" />
+
+                <commands:RelayCommand x:Key="SearchProjectFileCommand" DoThat="{Binding OpenProjectFileSearchDialog}" />
+                <commands:RelayCommand x:Key="AddLanguageCommand" DoThat="{Binding AddLanguage}" CanDoThis="{Binding CanAddLanguage}" />
+                <commands:RelayCommand x:Key="RemoveLanguageCommand" DoThis="{Binding RemoveLanguage}" />
+                <commands:RelayCommand x:Key="ParseNewLanguagesToProjectCommand" DoThat="{Binding ParseNewLanguagesToProject}" CanDoThis="{Binding CanParseNewLanguagesToProject}" />
+
             </Grid.Resources>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -64,10 +74,10 @@
                         <TextBlock Grid.Column="0" Text="Selected project:"/>
 
                         <Border BorderThickness="1" BorderBrush="Black" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                            <TextBlock VerticalAlignment="Center" FontStyle="Italic" x:Name="TextBox_MobiriseProjectPath" />
+                            <TextBlock VerticalAlignment="Center" FontStyle="Italic" Text="{Binding ProjectFilePath}" />
                         </Border>
 
-                        <Button Grid.Column="2" Content="Search Mobirise config" Click="SearchProjectFile_Click" />
+                        <Button Grid.Column="2" Content="Search Mobirise config" Command="{Binding Source={StaticResource SearchProjectFileCommand}}" />
                     </Grid.Children>
                 </Grid>
 
@@ -87,7 +97,7 @@
 
                                 <StackPanel Grid.Column="0" Orientation="Horizontal">
                                     <TextBlock Text="First is original language: " />
-                                    <ItemsControl ItemsSource="{x:Bind AddedLanguages}">
+                                    <ItemsControl ItemsSource="{Binding AddedLanguages}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Horizontal" />
@@ -110,7 +120,8 @@
                                                         Width="16" 
                                                         Height="16" 
                                                         ToolTipService.ToolTip="Remove"
-                                                        Click="RemoveLanguage_Click">
+                                                        Command="{Binding Source={StaticResource RemoveLanguageCommand}}"
+                                                        CommandParameter="{Binding }">
                                                         <Button.Content>
                                                             <TextBlock Margin="0" Padding="0" FontWeight="Bold" FontSize="9" Foreground="DarkRed" Text="x" />
                                                         </Button.Content>
@@ -125,18 +136,17 @@
                         </ScrollViewer>
 
                         <StackPanel Grid.Column="1" Orientation="Horizontal">
-                            <StackPanel.Children>
-
-                                <ComboBox x:Name="LanguageSelectorComboBox" IsEnabled="False" ItemsSource="{x:Bind AvailableLanguages}" SelectedItem="{x:Bind CurrentSelectedCulture, Mode=TwoWay}">
+                            <ComboBox 
+                                    IsEnabled="{Binding ProjectFilePath, Converter={StaticResource IsNotNullOrWhitespaceConverter}}" 
+                                    ItemsSource="{Binding AvailableLanguages}" 
+                                    SelectedItem="{Binding CurrentSelectedCulture, Mode=TwoWay}">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Converter={StaticResource CultureInfoToLanguageName}}" />
                                         </DataTemplate>
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
-                                <Button x:Name="AddLanguageButton" IsEnabled="False" Content="Add language" Click="AddLanguage_Click" />
-
-                            </StackPanel.Children>
+                            <Button Content="Add language" Command="{Binding Source={StaticResource AddLanguageCommand}}" />
                         </StackPanel>
 
                     </Grid.Children>
@@ -146,13 +156,13 @@
 
                 <!--Region Translation area -->
 
-                <shared:TranslationGrid Grid.Row="3" DataContext="{x:Bind MobiriseProjectViewModel}" />
+                <shared:TranslationGrid Grid.Row="3" DataContext="{x:Bind viewmodels:MobiriseProjectViewModel.Get}" />
 
                 <!--Endregion Translation area -->
 
                 <!--Region Actions -->
 
-                <Button x:Name="TranslateButton" Grid.Row="4" IsEnabled="False" Content="Create translated mobirise projects..." Click="AddTranslatedPages_Click" />
+                <Button Grid.Row="4" Content="Create translated mobirise projects..." Command="{Binding Source={StaticResource ParseNewLanguagesToProjectCommand}}" />
 
                 <!--Endregion Actions -->
 

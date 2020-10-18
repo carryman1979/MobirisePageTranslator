@@ -13,6 +13,7 @@
     <SolidColorBrush x:Key="Done_OpenTextEditorButtonHoverForeground" Color="#056215" />
     <SolidColorBrush x:Key="Done_OpenTextEditorButtonPressedForeground" Color="Black" />
     <SolidColorBrush x:Key="OpenTextEditorButtonDisabledForground" Color="#545454" />
+    <SolidColorBrush x:Key="OriginalCellTextForeground" Color="Black" />
 
     <RevealBackgroundBrush x:Key="Todo_OpenTextEditorButtonBackground" Color="#D4B0AD" FallbackColor="#D4B0AD" TargetTheme="Light" />
     <RevealBackgroundBrush x:Key="Todo_OpenTextEditorButtonHoverBackground" Color="#EFEFA8" FallbackColor="#EFEFA8" TargetTheme="Light" />
