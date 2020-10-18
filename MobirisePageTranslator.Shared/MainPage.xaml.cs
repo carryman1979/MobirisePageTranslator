@@ -23,7 +23,7 @@ namespace MobirisePageTranslator
 
         public CultureInfo CurrentSelectedCulture { get; set; }
 
-        public MobiriseProjectViewModel MobiriseProjectViewModel { get; } = new MobiriseProjectViewModel();
+        internal MobiriseProjectViewModel MobiriseProjectViewModel { get; } = MobiriseProjectViewModel.Get;
 
         public MainPage()
         {

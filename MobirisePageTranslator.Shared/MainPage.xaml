@@ -2,10 +2,9 @@
     x:Class="MobirisePageTranslator.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:MobirisePageTranslator"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:shared="using:MobirisePageTranslator.Shared" 
+    xmlns:shared="using:MobirisePageTranslator.Shared.CellGrid" 
     xmlns:converter="using:MobirisePageTranslator.Shared.Converter" 
     xmlns:editor="using:MobirisePageTranslator.Shared.Editor"
     xmlns:viewmodels="using:MobirisePageTranslator.Shared.ViewModels"
@@ -25,7 +24,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.Children>
-                <!-- Editor Pop Up -->
+                <!--Region Editor Pop Up -->
 
                 <Popup 
                     x:Name="PopUp_TextEditor" 
@@ -45,15 +44,15 @@
                     </Grid>
                 </Popup>
 
-                <!-- Editor Pop Up -->
+                <!--Endregion Editor Pop Up -->
                 
-                <!-- Header -->
+                <!--Region Header -->
 
                 <TextBlock Grid.Row="0" FontWeight="Bold" FontSize="32" Text="Mobirise text translator" />
 
-                <!-- Header -->
+                <!--Endregion Header -->
 
-                <!-- Mobirise project chooser dialog -->
+                <!--Region Mobirise project chooser dialog -->
 
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
@@ -72,9 +71,9 @@
                     </Grid.Children>
                 </Grid>
 
-                <!-- Mobirise project chooser dialog -->
+                <!--Endregion Mobirise project chooser dialog -->
 
-                <!-- Language selection -->
+                <!--Region Language selection -->
 
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
@@ -143,25 +142,25 @@
                     </Grid.Children>
                 </Grid>
 
-                <!-- Language selection -->
+                <!--Endregion Language selection -->
 
-                <!-- Translation area -->
+                <!--Region Translation area -->
 
                 <shared:TranslationGrid Grid.Row="3" DataContext="{x:Bind MobiriseProjectViewModel}" />
 
-                <!-- Translation area -->
+                <!--Endregion Translation area -->
 
-                <!-- Actions -->
+                <!--Region Actions -->
 
                 <Button x:Name="TranslateButton" Grid.Row="4" IsEnabled="False" Content="Create translated mobirise projects..." Click="AddTranslatedPages_Click" />
 
-                <!-- Actions -->
+                <!--Endregion Actions -->
 
-                <!-- Footer -->
+                <!--Region Footer -->
 
                 <TextBlock HorizontalAlignment="Right" Grid.Row="5" FontSize="8" Margin="10 5" Foreground="Darkgray" Text="Copyright © 2020 FlatDog Company GmbH i. Gr.; 97000 Höchberg; https://www.flat.dog" />
 
-                <!-- Footer -->
+                <!--Endregion Footer -->
 
             </Grid.Children>
         </Grid>

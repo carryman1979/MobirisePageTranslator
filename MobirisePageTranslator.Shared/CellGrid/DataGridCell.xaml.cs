@@ -3,7 +3,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
-namespace MobirisePageTranslator.Shared
+namespace MobirisePageTranslator.Shared.CellGrid
 {
     public sealed partial class DataGridCell : UserControl
     {

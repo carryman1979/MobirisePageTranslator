@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Windows.UI.Xaml.Controls;
 
-namespace MobirisePageTranslator.Shared
+namespace MobirisePageTranslator.Shared.CellGrid
 {
     public sealed partial class DataGrid : ItemsControl
     {

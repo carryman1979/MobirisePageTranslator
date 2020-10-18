@@ -29,7 +29,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Converter\DataGrid\CellTypeToFontStyleConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converter\DataGrid\CellTypeToFontWeightConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converter\DataGrid\TrimTextConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DataGridCell.xaml.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)CellGrid\DataGridCell.xaml.cs">
       <DependentUpon>DataGridCell.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Data\CellType.cs" />
@@ -43,20 +43,21 @@
     <Compile Include="$(MSBuildThisFileDirectory)Editor\TextEditor.xaml.cs">
       <DependentUpon>TextEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\TextEditorViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)DataGrid.xaml.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)CellGrid\DataGrid.xaml.cs">
       <DependentUpon>DataGrid.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MobiriseProjectViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)TranslationGrid.xaml.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)CellGrid\TranslationGrid.xaml.cs">
       <DependentUpon>TranslationGrid.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="$(MSBuildThisFileDirectory)DataGridCell.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)CellGrid\DataGridCell.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -68,11 +69,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)DataGrid.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)CellGrid\DataGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="$(MSBuildThisFileDirectory)TranslationGrid.xaml">
+    <Page Include="$(MSBuildThisFileDirectory)CellGrid\TranslationGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Resources\DesignResources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -84,6 +89,6 @@
     <PRIResource Include="$(MSBuildThisFileDirectory)Strings\en\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)ViewModels\" />
+    <Folder Include="$(MSBuildThisFileDirectory)CellGrid\" />
   </ItemGroup>
 </Project>

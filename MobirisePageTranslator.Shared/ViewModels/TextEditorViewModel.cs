@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 namespace MobirisePageTranslator.Shared.ViewModels
 {
-    public sealed class TextEditorViewModel : INotifyPropertyChanged
+    internal sealed class TextEditorViewModel : INotifyPropertyChanged
     {
         private ObservableCollection<ICell> _cells;
         private ContentCell _currentCell;

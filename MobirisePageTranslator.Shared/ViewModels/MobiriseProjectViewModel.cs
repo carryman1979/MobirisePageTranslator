@@ -12,7 +12,7 @@ using Windows.Storage;
 
 namespace MobirisePageTranslator.Shared.ViewModels
 {
-    public sealed class MobiriseProjectViewModel
+    internal sealed class MobiriseProjectViewModel
     {
         private StorageFile _projectFile;
         private ObservableCollection<CultureInfo> _languages;
@@ -27,9 +27,13 @@ namespace MobirisePageTranslator.Shared.ViewModels
             "_customHTML"
         };
 
+        private static volatile Lazy<MobiriseProjectViewModel> _lazyObject = new Lazy<MobiriseProjectViewModel>(new MobiriseProjectViewModel());
+
+        public static MobiriseProjectViewModel Get => _lazyObject.Value;
+
         public ObservableCollection<ICell> CellItems { get; }
 
-        public MobiriseProjectViewModel()
+        private MobiriseProjectViewModel()
         {
             var cellItems = new ObservableCollection<ICell>();
             CellItems = cellItems;

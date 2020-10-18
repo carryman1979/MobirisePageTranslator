@@ -42,6 +42,24 @@ namespace MobirisePageTranslator.Shared.Commands
                         snd.CanExecuteChanged?.Invoke(snd, EventArgs.Empty);
                 })));
 
+        public Func<bool> CanDoThatWithThis
+        {
+            get { return (Func<bool>)GetValue(CanDoThatWithThisProperty); }
+            set { SetValue(CanDoThatWithThisProperty, value); }
+        }
+
+        public static readonly DependencyProperty CanDoThatWithThisProperty =
+            DependencyProperty.Register(
+                nameof(CanDoThatWithThis),
+                typeof(Func<bool>),
+                typeof(RelayCommand),
+                new PropertyMetadata(new Func<bool>(() => true), new PropertyChangedCallback((obj, args) =>
+                {
+                    var snd = (RelayCommand)obj;
+                    if (args.NewValue != args.OldValue && args.NewValue != null)
+                        snd.CanExecuteChanged?.Invoke(snd, EventArgs.Empty);
+                })));
+
         public Action<object> DoThis
         {
             get { return (Action<object>)GetValue(DoThisProperty); }
@@ -60,16 +78,37 @@ namespace MobirisePageTranslator.Shared.Commands
                         snd.CanExecuteChanged?.Invoke(snd, EventArgs.Empty);
                 })));
 
+        public Action DoThat
+        {
+            get { return (Action)GetValue(DoThatProperty); }
+            set { SetValue(DoThatProperty, value); }
+        }
+
+        public static readonly DependencyProperty DoThatProperty =
+            DependencyProperty.Register(
+                nameof(DoThat),
+                typeof(Action),
+                typeof(RelayCommand),
+                new PropertyMetadata(null, new PropertyChangedCallback((obj, args) =>
+                {
+                    var snd = (RelayCommand)obj;
+                    if (args.NewValue != args.OldValue && args.NewValue != null)
+                        snd.CanExecuteChanged?.Invoke(snd, EventArgs.Empty);
+                })));
+
         public event EventHandler CanExecuteChanged;
 
         public bool CanExecute(object parameter)
         {
-            return DoThis != null && CanDoThis && CanDoThisWithThat.Invoke(parameter);
+            return (DoThat != null || DoThis != null) 
+                && CanDoThis 
+                && (CanDoThisWithThat.Invoke(parameter) || CanDoThatWithThis.Invoke());
         }
 
         public void Execute(object parameter)
         {
             DoThis?.Invoke(parameter);
+            DoThat?.Invoke();
         }
     }
 }

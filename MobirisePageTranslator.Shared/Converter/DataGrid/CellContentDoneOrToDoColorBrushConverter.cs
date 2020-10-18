@@ -1,5 +1,4 @@
-﻿using MobirisePageTranslator.Shared.Data;
-using System;
+﻿using System;
 using System.Linq;
 using Windows.UI;
 using Windows.UI.Xaml;
