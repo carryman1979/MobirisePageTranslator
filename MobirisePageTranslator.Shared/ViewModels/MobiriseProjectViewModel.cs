@@ -14,10 +14,7 @@ namespace MobirisePageTranslator.Shared.ViewModels
 {
     internal sealed class MobiriseProjectViewModel
     {
-        private StorageFile _projectFile;
-        private ObservableCollection<CultureInfo> _languages;
-        private JsonObject _jsonPrjObj;
-        private JsonObject _pages;
+        private static readonly Lazy<MobiriseProjectViewModel> _lazyObject = new Lazy<MobiriseProjectViewModel>(new MobiriseProjectViewModel());
         private readonly Dictionary<string, JsonObject> _currentCopiedPage = new Dictionary<string, JsonObject>();
         private readonly List<string> _mobirisePureTextKeys = new List<string>
         {
@@ -26,12 +23,10 @@ namespace MobirisePageTranslator.Shared.ViewModels
             "custom_html",
             "_customHTML"
         };
-
-        private static volatile Lazy<MobiriseProjectViewModel> _lazyObject = new Lazy<MobiriseProjectViewModel>(new MobiriseProjectViewModel());
-
-        public static MobiriseProjectViewModel Get => _lazyObject.Value;
-
-        public ObservableCollection<ICell> CellItems { get; }
+        private StorageFile _projectFile;
+        private ObservableCollection<CultureInfo> _languages;
+        private JsonObject _jsonPrjObj;
+        private JsonObject _pages;
 
         private MobiriseProjectViewModel()
         {
@@ -41,12 +36,23 @@ namespace MobirisePageTranslator.Shared.ViewModels
             TextEditorViewModel.Initialize(cellItems);
         }
 
+        public static MobiriseProjectViewModel Get => _lazyObject.Value;
+
+        public ObservableCollection<ICell> CellItems { get; }
+
         public void Initialize(StorageFile projectFile, in ObservableCollection<CultureInfo> languages)
         {
             _projectFile = projectFile;
             _languages = languages;
             _languages.CollectionChanged += OnLanguagesChanged;
             InitializeLanguages(_languages);
+        }
+
+        public void CleanUp()
+        {
+            if (_languages != null)
+                _languages.CollectionChanged -= OnLanguagesChanged;
+            CellItems.Clear();
         }
 
         public void ParseNewPagesToProject()
@@ -92,11 +98,11 @@ namespace MobirisePageTranslator.Shared.ViewModels
             }
             else
             {
-                ParseNewContentOfPages(cellItem, countOfLanguages);
+                ParseNewContentOfPages(cellItem);
             }
         }
 
-        private void ParseNewContentOfPages(ICell cellItem, int countOfLanguages)
+        private void ParseNewContentOfPages(ICell cellItem)
         {
             var originalCell = cellItem as OriginalCell;
 
@@ -139,13 +145,6 @@ namespace MobirisePageTranslator.Shared.ViewModels
                             .Single(y => y.Row == pageCell.Row && y.Col == x + 1)
                             .Content,
                         JsonObject.Parse(origPageJson)));
-        }
-
-        public void CleanUp()
-        {
-            if (_languages != null)
-                _languages.CollectionChanged -= OnLanguagesChanged;
-            CellItems.Clear();
         }
 
         private void OnLanguagesChanged(object sender, NotifyCollectionChangedEventArgs args)

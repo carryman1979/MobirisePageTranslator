@@ -1,0 +1,32 @@
+﻿<UserControl
+    x:Class="MobirisePageTranslator.Shared.Controls.EditorPopUpControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:editor="using:MobirisePageTranslator.Shared.Controls.Editor"
+    xmlns:viewmodels="using:MobirisePageTranslator.Shared.ViewModels"
+    HorizontalAlignment="Stretch"
+    VerticalAlignment="Stretch"
+    HorizontalContentAlignment="Stretch"
+    VerticalContentAlignment="Stretch"
+    DataContext="{x:Bind viewmodels:TextEditorViewModel.Get}"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+    <Popup
+        x:Name="PopUp_TextEditor"
+        VerticalAlignment="Stretch" 
+        HorizontalAlignment="Stretch">
+        <Popup.IsOpen>
+            <Binding Path="IsOpen" />
+        </Popup.IsOpen>
+        <Grid>
+            <editor:TextEditor 
+                Width="{Binding ElementName=PopUp_TextEditor, Path=ActualWidth}"
+                Height="{Binding ElementName=PopUp_TextEditor, Path=ActualHeight}" />
+        </Grid>
+    </Popup>
+    
+</UserControl>

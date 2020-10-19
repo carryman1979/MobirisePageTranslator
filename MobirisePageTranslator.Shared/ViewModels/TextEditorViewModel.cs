@@ -9,18 +9,33 @@ namespace MobirisePageTranslator.Shared.ViewModels
 {
     internal sealed class TextEditorViewModel : INotifyPropertyChanged
     {
+        private static readonly Lazy<TextEditorViewModel> _lazyObject = new Lazy<TextEditorViewModel>(new TextEditorViewModel());
         private ObservableCollection<ICell> _cells;
-        private ContentCell _currentCell;
-        private static volatile Lazy<TextEditorViewModel> _lazyObject = new Lazy<TextEditorViewModel>(new TextEditorViewModel());
-
+        private ICell _currentCell;
+        private string _original;
+        private string _translate;
+        private bool _isOpen;
+        
         public static void Initialize(ObservableCollection<ICell> cells)
         {
             _lazyObject.Value.Setup(cells);
         }
 
+        private TextEditorViewModel()
+        {
+            SaveAction = new Action(SaveActionLogic);
+            CancelAction = new Action(CleanUp);
+            OpenAction = new Action<object>(OpenActionLogic);
+        }
+
         public static TextEditorViewModel Get => _lazyObject.Value;
 
-        private string _original;
+        public Action SaveAction { get; }
+
+        public Action CancelAction { get; }
+
+        public Action<object> OpenAction { get; }
+
         public string Original
         {
             get => _original; 
@@ -34,7 +49,6 @@ namespace MobirisePageTranslator.Shared.ViewModels
             }
         }
 
-        private string _translate;
         public string Translate
         {
             get => _translate;
@@ -48,7 +62,7 @@ namespace MobirisePageTranslator.Shared.ViewModels
             }
         }
 
-        private bool _isOpen;
+        
         public bool IsOpen
         {
             get => _isOpen;
@@ -62,28 +76,26 @@ namespace MobirisePageTranslator.Shared.ViewModels
             }
         }
 
-        public Action<object> SaveAction { get; } 
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        public Action<object> CancelAction { get; }
-
-        public Action<object> OpenAction { get; }
-
-        private TextEditorViewModel()
+        private void OpenActionLogic(object paramObj)
         {
-            SaveAction = new Action<object>(paramObj =>
+            SetActiveContentCell((ICell)paramObj);
+            IsOpen = true;
+        }
+
+        private void SaveActionLogic()
+        {
+            var editableContentCell = _currentCell as ContentCell;
+            if (editableContentCell == null)
             {
-                _currentCell.Content = Translate;
-                CleanUp();
-            });
-            CancelAction = new Action<object>(paramObj => 
-            {
-                CleanUp();
-            });
-            OpenAction = new Action<object>(paramObj =>
-            {
-                SetActiveContentCell((ContentCell)paramObj);
-                IsOpen = true;
-            });
+                var editablePageCell = _currentCell as PageCell;
+
+                editablePageCell.Content = Translate;
+            }
+            else
+                editableContentCell.Content = Translate;
+            CleanUp();
         }
 
         private void Setup(ObservableCollection<ICell> cells)
@@ -102,14 +114,15 @@ namespace MobirisePageTranslator.Shared.ViewModels
             IsOpen = false;
         }
 
-        private void SetActiveContentCell(ContentCell contentCell)
+        private void SetActiveContentCell(ICell contentCell)
         {
             _currentCell = contentCell;
-            Original = _cells.OfType<OriginalCell>().Single(x => x.Row == _currentCell.Row).Content;
-            Translate = _currentCell.Content.Substring(1, _currentCell.Content.Length - 2);
+            Original = _cells.OfType<OriginalCell>().SingleOrDefault(x => x.Row == _currentCell.Row)?.Content ??
+                       _cells.OfType<OriginalPageCell>().Single(x => x.Row == _currentCell.Row).Content;
+            Translate = _currentCell.Content.First() == '[' && _currentCell.Content.Last() == ']'
+                ? _currentCell.Content.Substring(1, _currentCell.Content.Length - 2)
+                : _currentCell.Content;
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         private void RaisePropertyChanged([CallerMemberName] string propertyName = null)
         {

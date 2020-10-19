@@ -6,30 +6,12 @@ using Windows.UI.Xaml.Data;
 
 namespace MobirisePageTranslator.Shared.Converter
 {
-    /// <see cref="IValueConverter"/>
-    /// <summary>
-    /// This is a converter class which provides math operations on bound value.
-    /// </summary>
-    public class MathConverter : IValueConverter
+    public sealed class MathConverter : IValueConverter
     {
         private static readonly char[] myOperators = {'+', '-', '*', '/', '%', '(', ')'};
         private static readonly List<string> myGroupSigns = new List<string> {"(", ")"};
         private static readonly List<string> myMathOperators = new List<string> {"+", "-", "*", "/", "%"};
 
-        /// <see cref="IValueConverter.Convert"/>
-        /// <summary>
-        /// Converts a value.
-        /// </summary>
-        /// <param name="value">The value produced by the binding source and can be used as @VALUE in the parameter statement.</param>
-        /// <param name="targetType">Not used.</param>
-        /// <param name="parameter">The math statement which should be executed on the value.</param>
-        /// <param name="culture">Not used.</param>
-        /// <returns>
-        /// A converted value. If the method returns null, the valid null value is used.
-        /// </returns>
-        /// <exception cref="InvalidOperationException">If the given math statement is not executable.</exception>
-        /// <exception cref="InvalidCastException">If the given value or statement is not numeric parseable.</exception>
-        /// <exception cref="FormatException">If the given statement is not in correct format.</exception>
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             var mathEquation = PrepareInput( value, parameter );
@@ -40,15 +22,6 @@ namespace MobirisePageTranslator.Shared.Converter
             return numbers[ 0 ];
         }
 
-        /// <see cref="IValueConverter.ConvertBack"/>
-        /// <summary>
-        /// Convert back is not supported.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="targetType"></param>
-        /// <param name="parameter"></param>
-        /// <param name="culture"></param>
-        /// <exception cref="NotSupportedException">Always thrown.</exception>
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             throw new NotSupportedException();

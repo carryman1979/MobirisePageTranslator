@@ -17,9 +17,9 @@ namespace MobirisePageTranslator.Shared.ViewModels
         private StorageFile _mobiriseProjectFile;
         private CultureInfo _currentSelectedLanguageCulture;
         private string _projectFilePath = string.Empty;
-        private bool _canAddLanguage = true;
+        private bool _canAddLanguage;
         private bool _canParseNewLanguagesToProject;
-        private static volatile Lazy<MainViewModel> _lazyObject = new Lazy<MainViewModel>(new MainViewModel());
+        private static readonly Lazy<MainViewModel> _lazyObject = new Lazy<MainViewModel>(new MainViewModel());
 
         public static MainViewModel Get => _lazyObject.Value;
 
@@ -126,7 +126,7 @@ namespace MobirisePageTranslator.Shared.ViewModels
 
             UWP_SearchMobiriseProjectFile()
                 .ContinueWith(tsk => Sync(StartMobiriseProjectParser));
-
+            
 #elif __MACOS__
 
 #endif
@@ -147,6 +147,7 @@ namespace MobirisePageTranslator.Shared.ViewModels
                 {
                     _mobiriseProjectFile = mobiriseProjectFile;
                     ProjectFilePath = _mobiriseProjectFile.Path;
+                    UpdateButtonsState();
                 });
             }
             else
@@ -180,7 +181,10 @@ namespace MobirisePageTranslator.Shared.ViewModels
         {
             CanAddLanguage = _mobiriseProjectFile != null;
             if (_mobiriseProjectFile == null)
+            {
+                AddedLanguages.Clear();
                 CanParseNewLanguagesToProject = false;
+            }
         }
 
         private void StartMobiriseProjectParser()
