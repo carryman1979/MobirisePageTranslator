@@ -1,5 +1,4 @@
-﻿using MobirisePageTranslator.Shared.ViewModels;
-using Windows.Data.Json;
+﻿using Windows.Data.Json;
 
 namespace MobirisePageTranslator.Shared.Data
 {

@@ -99,6 +99,8 @@ namespace MobirisePageTranslator.Shared.ViewModels
             }
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private void AddLanguageLogic()
         {
             if (_currentSelectedLanguageCulture != null && !AddedLanguages.Contains(_currentSelectedLanguageCulture))
@@ -106,6 +108,10 @@ namespace MobirisePageTranslator.Shared.ViewModels
                 CanAddLanguage = false;
                 AddedLanguages.Add(_currentSelectedLanguageCulture);
                 StartMobiriseProjectParser();
+            }
+            if (AddedLanguages.Count > 1)
+            {
+                CanParseNewLanguagesToProject = true;
             }
         }
 
@@ -117,6 +123,10 @@ namespace MobirisePageTranslator.Shared.ViewModels
             {
                 AddedLanguages.Remove(languageCulture);
                 CanAddLanguage = !AddedLanguages.Contains(_currentSelectedLanguageCulture);
+            }
+            if (AddedLanguages.Count <= 1)
+            {
+                CanParseNewLanguagesToProject = false;
             }
         }
 
@@ -192,7 +202,6 @@ namespace MobirisePageTranslator.Shared.ViewModels
             if (AddedLanguages.Count == 1)
                 MobiriseProjectViewModel.Get.Initialize(_mobiriseProjectFile, AddedLanguages);
         }
-        public event PropertyChangedEventHandler PropertyChanged;
 
         private void RaisePropertyChanged([CallerMemberName] string propName = null)
         {

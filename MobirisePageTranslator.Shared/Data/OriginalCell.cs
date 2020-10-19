@@ -1,6 +1,4 @@
-﻿using MobirisePageTranslator.Shared.ViewModels;
-
-namespace MobirisePageTranslator.Shared.Data
+﻿namespace MobirisePageTranslator.Shared.Data
 {
     public sealed class OriginalCell : ICell
     {

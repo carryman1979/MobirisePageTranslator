@@ -6,6 +6,7 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Data.Json;
 using Windows.Storage;
@@ -105,22 +106,25 @@ namespace MobirisePageTranslator.Shared.ViewModels
         private void ParseNewContentOfPages(ICell cellItem)
         {
             var originalCell = cellItem as OriginalCell;
+            var baseKey = Regex.Match(originalCell.JsonKey, @"\([^()] *\)$");
 
             if (originalCell != null)
             {
-                foreach (var lngId in _currentCopiedPage.Keys)
-                {
-                    var colId = CellItems
-                            .Single(y => y.Type.HasFlag(CellType.SubHeader) && Equals(y.Content, lngId))
-                            .Col;
-                    _currentCopiedPage[lngId]["settings"].GetObject()[originalCell.JsonKey] =
-                        JsonValue.CreateStringValue(
-                            string.Format(
-                                originalCell.Format,
-                                CellItems
-                                .Single(x => x.Row == originalCell.Row && x.Col == colId)
-                                .Content));
-                }
+                _currentCopiedPage.Keys
+                    .ToList()
+                    .ForEach(lngId =>
+                    {
+                        var colId = CellItems
+                                .Single(y => y.Type.HasFlag(CellType.SubHeader) && Equals(y.Content, lngId))
+                                .Col;
+                        _currentCopiedPage[lngId]["settings"].GetObject()[originalCell.JsonKey] =
+                            JsonValue.CreateStringValue(
+                                string.Format(
+                                    originalCell.Format,
+                                    CellItems
+                                    .Single(x => x.Row == originalCell.Row && x.Col == colId)
+                                    .Content));
+                    });
             }
         }
 
@@ -233,19 +237,23 @@ namespace MobirisePageTranslator.Shared.ViewModels
                 _mobirisePureTextKeys
                     .ForEach(k => TryGetPageItem(k, ref rowIdx, pageSettings));
                 _mobirisePureTextKeys
-                    .ForEach(k => 
+                    .ForEach(k =>
+                    {
+                        var arrIdx = 0;
                         pageComponents
                             .ToList()
-                            .ForEach(c => TryGetPageItem(k, ref rowIdx, c.GetObject())));
+                            .ForEach(c => TryGetPageItem(k, ref rowIdx, c.GetObject(), arrIdx++));
+                    });
+                        
             }
         }
 
-        private void TryGetPageItem(string key, ref int rowIdx, JsonObject jsonObject)
+        private void TryGetPageItem(string key, ref int rowIdx, JsonObject jsonObject, int arrIdx = -1)
         {
             if (jsonObject.ContainsKey(key))
             {
                 var text = jsonObject[key].GetString();
-                CellItems.Add(new OriginalCell(text, ++rowIdx, key));
+                CellItems.Add(new OriginalCell(text, ++rowIdx, arrIdx >= 0 ? $"[settings][{key}]" : $"[components][{arrIdx}][{key}]"));
             }
         }
 
