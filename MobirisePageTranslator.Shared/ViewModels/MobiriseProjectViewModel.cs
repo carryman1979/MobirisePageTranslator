@@ -106,10 +106,12 @@ namespace MobirisePageTranslator.Shared.ViewModels
         private void ParseNewContentOfPages(ICell cellItem)
         {
             var originalCell = cellItem as OriginalCell;
-            var baseKey = Regex.Match(originalCell.JsonKey, @"\([^()] *\)$");
-
             if (originalCell != null)
             {
+                var jsonKeys = Regex.Matches(originalCell.JsonKey, @"\[(.*?)\]")
+                    .Select(x => x.Groups.Last().Value)
+                    .ToList();
+
                 _currentCopiedPage.Keys
                     .ToList()
                     .ForEach(lngId =>
@@ -117,13 +119,29 @@ namespace MobirisePageTranslator.Shared.ViewModels
                         var colId = CellItems
                                 .Single(y => y.Type.HasFlag(CellType.SubHeader) && Equals(y.Content, lngId))
                                 .Col;
-                        _currentCopiedPage[lngId]["settings"].GetObject()[originalCell.JsonKey] =
-                            JsonValue.CreateStringValue(
-                                string.Format(
-                                    originalCell.Format,
-                                    CellItems
-                                    .Single(x => x.Row == originalCell.Row && x.Col == colId)
-                                    .Content));
+                       
+                        if (jsonKeys.Count == 2)
+                        {
+                            var rootObj = _currentCopiedPage[lngId][jsonKeys.First()].GetObject();
+                            rootObj[jsonKeys.Last()] =
+                                JsonValue.CreateStringValue(
+                                    string.Format(
+                                        originalCell.Format,
+                                        CellItems
+                                        .Single(x => x.Row == originalCell.Row && x.Col == colId)
+                                        .Content));
+                        }
+                        else if (jsonKeys.Count == 3)
+                        {
+                            var rootObj = _currentCopiedPage[lngId][jsonKeys.First()].GetArray();
+                            rootObj[int.Parse(jsonKeys.ElementAt(1))].GetObject()[jsonKeys.Last()] =
+                                JsonValue.CreateStringValue(
+                                    string.Format(
+                                        originalCell.Format,
+                                        CellItems
+                                        .Single(x => x.Row == originalCell.Row && x.Col == colId)
+                                        .Content));
+                        }
                     });
             }
         }
@@ -216,6 +234,7 @@ namespace MobirisePageTranslator.Shared.ViewModels
             }
 
             _jsonPrjObj = JsonValue.Parse(result).GetObject();
+            // TODO
             var settings = _jsonPrjObj["settings"].GetObject();
             _pages = _jsonPrjObj["pages"].GetObject();
 
@@ -253,7 +272,7 @@ namespace MobirisePageTranslator.Shared.ViewModels
             if (jsonObject.ContainsKey(key))
             {
                 var text = jsonObject[key].GetString();
-                CellItems.Add(new OriginalCell(text, ++rowIdx, arrIdx >= 0 ? $"[settings][{key}]" : $"[components][{arrIdx}][{key}]"));
+                CellItems.Add(new OriginalCell(text, ++rowIdx, arrIdx < 0 ? $"[settings][{key}]" : $"[components][{arrIdx}][{key}]"));
             }
         }
 
