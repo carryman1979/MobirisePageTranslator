@@ -234,7 +234,9 @@ namespace MobirisePageTranslator.Shared.ViewModels
             }
 
             _jsonPrjObj = JsonValue.Parse(result).GetObject();
-            // TODO
+            // TODO Make Global Settings like GPDR and more visible for translation...
+            // TODO Automatically add language dependent META-tags...
+            // TODO Automatically update all menu-entries automatically with new language dependent links...
             var settings = _jsonPrjObj["settings"].GetObject();
             _pages = _jsonPrjObj["pages"].GetObject();
 

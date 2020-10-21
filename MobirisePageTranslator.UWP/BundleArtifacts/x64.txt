@@ -1,0 +1,2 @@
+MainPackage=D:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\bin\x64\Release\MobirisePageTranslator.UWP_1.0.1.0_x64.msix
+SymbolPackage=D:\Sources\MobirisePageTranslator\MobirisePageTranslator.UWP\obj\x64\Release\Symbols\MobirisePageTranslator.UWP_1.0.1.0_x64.appxsym
