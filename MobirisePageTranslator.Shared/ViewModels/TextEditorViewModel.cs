@@ -1,9 +1,11 @@
-﻿using MobirisePageTranslator.Shared.Data;
+﻿using MobirisePageTranslator.Shared.Converter.Editor;
+using MobirisePageTranslator.Shared.Data;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Windows.UI.Xaml.Data;
 
 namespace MobirisePageTranslator.Shared.ViewModels
 {

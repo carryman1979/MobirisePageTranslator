@@ -5,10 +5,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:commands="using:MobirisePageTranslator.Shared.Commands"
+    xmlns:converter="using:MobirisePageTranslator.Shared.Converter.Editor"
     xmlns:viewmodels="using:MobirisePageTranslator.Shared.ViewModels"
+    xmlns:controls="using:MobirisePageTranslator.Shared.Controls.Editor"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=viewmodels:TextEditorViewModel, IsDesignTimeCreatable=False}">
     <UserControl.Resources>
+        <converter:HtmlToRtfTypeConverter x:Key="HtmlToRtfConverter" />
         <commands:RelayCommand x:Key="SaveCommand" DoThat="{Binding Path=SaveAction}" />
         <commands:RelayCommand x:Key="CancelCommand" DoThat="{Binding Path=CancelAction}" />
     </UserControl.Resources>
@@ -44,14 +47,10 @@
                 <TextBlock Text="{Binding Path=Original}" />
             </ScrollViewer>
             <ScrollViewer Grid.Row="2" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                <TextBox HorizontalAlignment="Stretch" 
-                         HorizontalContentAlignment="Stretch" 
-                         VerticalContentAlignment="Stretch" 
-                         VerticalAlignment="Stretch"
-                         TextAlignment="Left" 
-                         TextWrapping="Wrap"
-                         HorizontalTextAlignment="Start" 
-                         Text="{Binding Path=Translate, Mode=TwoWay}" />
+                <ContentPresenter
+                    HorizontalAlignment="Stretch" 
+                    VerticalAlignment="Stretch"
+                    Content="{Binding Path=Translate, Converter={StaticResource HtmlToRtfConverter}}" />
             </ScrollViewer>
             <StackPanel 
                 Grid.Row="3"

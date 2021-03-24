@@ -31,6 +31,7 @@
       <DependentUpon>ProjectChooserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Converter\DataGrid\CellContentDoneOrToDoColorBrushConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converter\Editor\HtmlToRtfTypeConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converter\MathConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Commands\RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converter\CultureInfoToLanguageNameConverter.cs" />
@@ -52,6 +53,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Data\OriginalCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\OriginalPageCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\PageCell.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\SaveData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\SupportedLanguages.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Editor\TextEditor.xaml.cs">
       <DependentUpon>TextEditor.xaml</DependentUpon>
