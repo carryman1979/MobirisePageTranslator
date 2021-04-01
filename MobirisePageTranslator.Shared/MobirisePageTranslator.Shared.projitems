@@ -31,7 +31,7 @@
       <DependentUpon>ProjectChooserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Converter\DataGrid\CellContentDoneOrToDoColorBrushConverter.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Converter\Editor\HtmlToRtfTypeConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Converter\Editor\HtmlRichEditBox.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converter\MathConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Commands\RelayCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Converter\CultureInfoToLanguageNameConverter.cs" />

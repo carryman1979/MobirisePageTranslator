@@ -11,7 +11,6 @@
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=viewmodels:TextEditorViewModel, IsDesignTimeCreatable=False}">
     <UserControl.Resources>
-        <converter:HtmlToRtfTypeConverter x:Key="HtmlToRtfConverter" />
         <commands:RelayCommand x:Key="SaveCommand" DoThat="{Binding Path=SaveAction}" />
         <commands:RelayCommand x:Key="CancelCommand" DoThat="{Binding Path=CancelAction}" />
     </UserControl.Resources>
@@ -47,10 +46,10 @@
                 <TextBlock Text="{Binding Path=Original}" />
             </ScrollViewer>
             <ScrollViewer Grid.Row="2" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                <ContentPresenter
+                <converter:HtmlRichEditBox
                     HorizontalAlignment="Stretch" 
                     VerticalAlignment="Stretch"
-                    Content="{Binding Path=Translate, Converter={StaticResource HtmlToRtfConverter}}" />
+                    HtmlContent="{Binding Path=Translate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </ScrollViewer>
             <StackPanel 
                 Grid.Row="3"
