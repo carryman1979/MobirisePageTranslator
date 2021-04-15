@@ -7,8 +7,28 @@ using Windows.UI.Text;
 
 namespace MobirisePageTranslator.Shared.Converter.Editor
 {
+    internal enum TextType
+    {
+        H1,
+        H2,
+        H3,
+        H4, 
+        H5,
+        H6,
+        P,
+        A
+    }
+
+    internal struct ReplacementDto
+    {
+        public TextType MyProperty { get; set; }
+        public int Position { get; set; }
+        public string Attributes { get; set; }
+    }
+
     public sealed class HtmlRichEditBox : RichEditBox
     {
+        private bool _isHtml = false;
         private const RegexOptions _regexOptions = RegexOptions.Multiline;
         private Dictionary<Regex, string> _htmlToRtfMatching = new Dictionary<Regex, string>
         {
@@ -46,7 +66,11 @@ namespace MobirisePageTranslator.Shared.Converter.Editor
 
         protected override void OnLostFocus(RoutedEventArgs e)
         {
-            TextDocument.GetText(TextGetOptions.FormatRtf, out string result);
+            string result;
+            if (_isHtml)
+                TextDocument.GetText(TextGetOptions.FormatRtf, out result);
+            else
+                TextDocument.GetText(TextGetOptions.None, out result);
             HtmlContent = result;
 
             base.OnLostFocus(e);
@@ -54,37 +78,62 @@ namespace MobirisePageTranslator.Shared.Converter.Editor
 
         private void Convert(string htmlText)
         {
-            var rtfText =
-                "{\\rtf1\\ansi\\deff0{\\fonttbl{\\f0\\fnil\\fcharset0 Arial;}}" +
-                "{\\colortbl;\\red0\\green0\\blue0;\\red0\\green0\\blue210;}";
+            bool originalReadOnlyValue = StartUpdate();
+            var result = htmlText;
+            _isHtml = false;
 
-            _htmlToRtfMatching
-                .ToList()
-                .ForEach(regRepl =>
-                {
-                    regRepl
-                        .Key
-                        .Matches(htmlText)
-                        .Where(x => x.Success)
-                        .OrderByDescending(y => y.Index + y.Length)
-                        .ToList()
-                        .ForEach(match =>
-                        {
-                            // Prepare string
-                            var formatedValue = match.Groups[1].Value.Replace("\n", " ").Replace("\r", string.Empty).Replace("\t", " ");
-                            var options = RegexOptions.None;
-                            var whitespacesRegex = new Regex("[ ]{2,}", options);
+            if (htmlText.Contains("<") && htmlText.Contains(">"))
+            {
+                _isHtml = true;
+                var rtfText =
+                    "{\\rtf1\\ansi\\deff0{\\fonttbl{\\f0\\fnil\\fcharset0 Arial;}}" +
+                    "{\\colortbl;\\red0\\green0\\blue0;\\red0\\green0\\blue210;}";
 
-                            formatedValue = whitespacesRegex.Replace(formatedValue, " ");
+                _htmlToRtfMatching
+                    .ToList()
+                    .ForEach(regRepl =>
+                    {
+                        regRepl
+                            .Key
+                            .Matches(htmlText)
+                            .Where(x => x.Success)
+                            .OrderByDescending(y => y.Index + y.Length)
+                            .ToList()
+                            .ForEach(match =>
+                            {
+                                // Prepare string
+                                var formatedValue = match.Groups[1].Value.Replace("\n", " ").Replace("\r", string.Empty).Replace("\t", " ");
+                                var options = RegexOptions.None;
+                                var whitespacesRegex = new Regex("[ ]{2,}", options);
 
-                            // Add to rtf formatted string...
-                            rtfText += string.Format(regRepl.Value, formatedValue);
-                        });
-                });
-            
-            rtfText += "}";
+                                formatedValue = whitespacesRegex.Replace(formatedValue, " ");
 
-            TextDocument.SetText(TextSetOptions.FormatRtf, rtfText);
+                                // Add to rtf formatted string...
+                                rtfText += string.Format(regRepl.Value, formatedValue);
+                            });
+                    });
+
+                rtfText += "}";
+                result = rtfText;
+            }
+
+            TextDocument.SetText(TextSetOptions.FormatRtf, result);
+
+            EndUpdate(originalReadOnlyValue);
+        }
+
+        private void EndUpdate(bool originalReadOnlyValue)
+        {
+            if (originalReadOnlyValue)
+                IsReadOnly = originalReadOnlyValue;
+        }
+
+        private bool StartUpdate()
+        {
+            var originalReadOnlyValue = IsReadOnly;
+            if (IsReadOnly)
+                IsReadOnly = false;
+            return originalReadOnlyValue;
         }
     }
 }

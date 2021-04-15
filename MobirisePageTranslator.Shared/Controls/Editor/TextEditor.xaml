@@ -43,7 +43,11 @@
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Original:" FontWeight="Bold" />
             <TextBlock Grid.Row="1" Grid.Column="1" Text="Translation:" FontWeight="Bold" />
             <ScrollViewer Grid.Row="2" Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                <TextBlock Text="{Binding Path=Original}" />
+                <converter:HtmlRichEditBox
+                    HorizontalAlignment="Stretch" 
+                    VerticalAlignment="Stretch"
+                    IsReadOnly="True"
+                    HtmlContent="{Binding Path=Original, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
             </ScrollViewer>
             <ScrollViewer Grid.Row="2" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                 <converter:HtmlRichEditBox
