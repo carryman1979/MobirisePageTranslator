@@ -105,6 +105,9 @@ namespace MobirisePageTranslator.Shared.Converter.Editor
                                 var formatedValue = match.Groups[1].Value.Replace("\n", " ").Replace("\r", string.Empty).Replace("\t", " ");
                                 var options = RegexOptions.None;
                                 var whitespacesRegex = new Regex("[ ]{2,}", options);
+                                var startIndex = match.Index;
+                                var textLength = match.Length;
+
 
                                 formatedValue = whitespacesRegex.Replace(formatedValue, " ");
 
