@@ -4,10 +4,14 @@ using System.Text.RegularExpressions;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Text;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
+using MobirisePageTranslator.Shared.Commands;
+using System.ComponentModel;
 
 namespace MobirisePageTranslator.Shared.Converter.Editor
 {
-    internal enum TextType
+    public enum TextType
     {
         H1,
         H2,
@@ -19,7 +23,7 @@ namespace MobirisePageTranslator.Shared.Converter.Editor
         A
     }
 
-    internal struct ReplacementDto
+    public struct ReplacementDto
     {
         public TextType Type { get; set; }
         public int Position { get; set; }
@@ -35,11 +39,11 @@ namespace MobirisePageTranslator.Shared.Converter.Editor
         public Regex RtfSearchRegex { get; set; }
     }
 
-    public sealed class HtmlRichEditBox : RichEditBox
+    public sealed class HtmlRichEditBox : RichEditBox, INotifyPropertyChanged
     {
-        private bool _isHtml = false;
+        private bool _isHtml;
         private const RegexOptions _regexOptions = RegexOptions.Multiline;
-        private List<HtmlRtfConverterDto> _htmlRtfConverterData = new List<HtmlRtfConverterDto>
+        private readonly List<HtmlRtfConverterDto> _htmlRtfConverterData = new List<HtmlRtfConverterDto>
         {
             new HtmlRtfConverterDto
             {
@@ -99,6 +103,49 @@ namespace MobirisePageTranslator.Shared.Converter.Editor
             },
         };
 
+        public HtmlRichEditBox()
+        {
+            BoldCommand = new RelayCommand 
+            { 
+                DoThat = () => 
+                { 
+                    IsBoldActive = !IsBoldActive;
+                    RaisePropertyChanged(nameof(IsBoldActive));
+                    PrepareTextForBold();
+                }
+            };
+            ItalicCommand = new RelayCommand 
+            { 
+                DoThat = () => 
+                {
+                    IsItalicActive = !IsItalicActive;
+                    RaisePropertyChanged(nameof(IsItalicActive));
+                    PrepareTextForItalic();
+                }
+            };
+            UnderlineCommand = new RelayCommand 
+            { 
+                DoThat = () => 
+                {
+                    IsUnderlineActive = !IsUnderlineActive;
+                    RaisePropertyChanged(nameof(IsUnderlineActive));
+                    PrepareTextForUnderline();
+                }
+            };
+        }
+
+        public ObservableCollection<ReplacementDto> ReplacedText { get; } = new ObservableCollection<ReplacementDto>();
+
+        public ICommand BoldCommand { get; }
+
+        public ICommand ItalicCommand { get; }
+
+        public ICommand UnderlineCommand { get; }
+
+        public bool IsBoldActive { get; private set; }
+        public bool IsItalicActive { get; private set; }
+        public bool IsUnderlineActive { get; private set; }
+
         public string HtmlContent
         {
             get => (string)GetValue(HtmlContentProperty);
@@ -121,6 +168,8 @@ namespace MobirisePageTranslator.Shared.Converter.Editor
                         }
                     })));
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         protected override void OnLostFocus(RoutedEventArgs e)
         {
             string result;
@@ -135,6 +184,8 @@ namespace MobirisePageTranslator.Shared.Converter.Editor
 
         private void Convert(string htmlText)
         {
+            ReplacedText.Clear();
+
             bool originalReadOnlyValue = StartUpdate();
             var result = htmlText;
             _isHtml = false;
@@ -170,6 +221,7 @@ namespace MobirisePageTranslator.Shared.Converter.Editor
                                 };
 
                                 formatedValue = whitespacesRegex.Replace(formatedValue, " ");
+                                ReplacedText.Add(replaceDto);
 
                                 // Add to rtf formatted string...
                                 rtfText += string.Format(regRepl.RtfReplacementString, formatedValue);
@@ -197,6 +249,45 @@ namespace MobirisePageTranslator.Shared.Converter.Editor
             if (IsReadOnly)
                 IsReadOnly = false;
             return originalReadOnlyValue;
+        }
+
+        private void PrepareTextForBold()
+        {
+            TextDocument.GetText(TextGetOptions.FormatRtf, out string text);
+            
+            if (TextDocument.Selection.Length > 0)
+            {
+                text =
+                    $"{text.Substring(0, TextDocument.Selection.StartPosition)}" +
+                    $"\b{text.Substring(TextDocument.Selection.StartPosition, TextDocument.Selection.Length)}\b0" +
+                    $"{text.Substring(TextDocument.Selection.EndPosition)}";
+                TextDocument.SetText(TextSetOptions.FormatRtf, text);
+            }
+            else
+            {
+                var wordIndex = TextDocument.Selection.GetIndex(TextRangeUnit.Word);
+                text =
+                    $"{text.Substring(0, wordIndex)}" +
+                    $"\b \b0" +
+                    $"{text.Substring(wordIndex)}";
+                TextDocument.SetText(TextSetOptions.FormatRtf, text);
+                TextDocument.Selection.SetRange(TextDocument.Selection.StartPosition + 2, TextDocument.Selection.EndPosition + 2);
+            }
+        }
+
+        private void PrepareTextForItalic()
+        {
+
+        }
+
+        private void PrepareTextForUnderline()
+        {
+
+        }
+
+        private void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

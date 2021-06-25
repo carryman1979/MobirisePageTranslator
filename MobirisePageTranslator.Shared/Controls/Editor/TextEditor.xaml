@@ -25,6 +25,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -39,24 +40,32 @@
                 BorderBrush="Black" 
                 BorderThickness="0 0 0 1">
                 <TextBlock Text="Text Editor" FontSize="16" FontWeight="Bold" />
-            </Border>
+            </Border>            
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Original:" FontWeight="Bold" />
-            <TextBlock Grid.Row="1" Grid.Column="1" Text="Translation:" FontWeight="Bold" />
-            <ScrollViewer Grid.Row="2" Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <Border 
+                Grid.Row="1" 
+                Grid.Column="1" 
+                BorderBrush="Black"
+                BorderThickness="1 0 0 0">
+                <TextBlock Text="Translation:" FontWeight="Bold" />
+            </Border>
+            <ScrollViewer Grid.Row="3" Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                 <converter:HtmlRichEditBox
+                    x:Name="ReadBox"
                     HorizontalAlignment="Stretch" 
                     VerticalAlignment="Stretch"
                     IsReadOnly="True"
                     HtmlContent="{Binding Path=Original, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
             </ScrollViewer>
-            <ScrollViewer Grid.Row="2" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <ScrollViewer Grid.Row="3" Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                 <converter:HtmlRichEditBox
+                    x:Name="EditBox"
                     HorizontalAlignment="Stretch" 
                     VerticalAlignment="Stretch"
                     HtmlContent="{Binding Path=Translate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </ScrollViewer>
             <StackPanel 
-                Grid.Row="3"
+                Grid.Row="4"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 HorizontalAlignment="Center"
@@ -72,6 +81,37 @@
                     </Button.Command>
                 </Button>
             </StackPanel>
+            <Border 
+                Grid.Row="2"
+                Grid.Column="1"
+                BorderBrush="Black"
+                BorderThickness="1 0 0 0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Tools:" FontWeight="Bold" VerticalAlignment="Center" />
+                    <ComboBox ItemsSource="{Binding ElementName=EditBox, Path=ReplacedText}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="converter:ReplacementDto">
+                                <TextBlock Text="{Binding Path=Type}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <ToggleButton 
+                        IsChecked="{Binding ElementName=EditBox, Path=IsBoldActive, Mode=OneWay}" 
+                        Command="{Binding ElementName=EditBox, Path=BoldCommand}">
+                        <TextBlock FontWeight="Bold" Text="B" />
+                    </ToggleButton>
+                    <ToggleButton
+                        IsChecked="{Binding ElementName=EditBox, Path=IsItalicActive, Mode=OneWay}" 
+                        Command="{Binding ElementName=EditBox, Path=ItalicCommand}">
+                        <TextBlock FontStyle="Italic" Text="I" />
+                    </ToggleButton>
+                    <ToggleButton
+                        IsChecked="{Binding ElementName=EditBox, Path=IsUnderlineActive, Mode=OneWay}" 
+                        Command="{Binding ElementName=EditBox, Path=UnderlineCommand}">
+                        <TextBlock TextDecorations="Underline" Text="U" />
+                    </ToggleButton>
+                </StackPanel>
+            </Border>
         </Grid>
     </Border>
 </UserControl>
